@@ -1,15 +1,145 @@
 # Windmachine
 An interactive installation demonstrating the power of the wind.
 
+## Status
+
 ## TODO
 
 Tuesday
 
-* Estimate part costs
 * Estimate hours / cost for project
 
-* Measure/test torque/speed needed for valve control
-* 
+Key questions
+
+* OK with FOSS (Sjur)
+* Measure/test valve control. torque/speed. (dep: Peter)
+* Fan control interface. Analog or modbus (dep: Peter)
+* OK with LCD display, or other (dep: Sjur)
+* Decide ownership domain,server,SIM (dep: Sjur)
+
+Risk moments
+
+* Interfacing fan,valve control
+* Data communication
+
+Milestone 0: Ready to work
+
+* Copy Ansible skeleton (J) 5
+* Define MQTT interface (J)
+* Setup RPi3b+ base (J)
+* Setup firmware base (J)
+* Fetch data using YR (J) 3
+* Setup server. Linode,DNS,email,Mosquitto in Ansible (M) 5
+
+Wed 3 - Fri 5
+Milestone A: Device-Server datapaths ready
+
+- Server is deployed
+- Server fetches current wind data from API
+- Device can fetch current wind data from server
+- RPI automatically sets up reverse SSH
+- Server reports last seen time basic. 2
+* Fetch data using HTML page (J) 3
+
+Milestone E: All electronics/hardware ordered.
+Fri 5 - Mon 8.
+
+- Resolve questions
+
+Mon 8, 
+Milestone B: All electronics assembled
+
+* RPi powered and running
+* Arduino with daughterboard
+* LEDs in control panel
+* Potmeter in control panel
+* Test button in control panel
+* User button plugged in
+* Display connected over HDMI
+* Fan power module connected
+
+Fri 12 - Mon 15
+Milestone C: I/O complete, from RPi
+
+* Turn status LEDs on/off
+* Get user button status (turn on)
+* Get adjust potiometer (power level)
+* Get test button stats (full power)
+* Set valve position
+* Set fan power
+* Show text on display
+
+Thurs 25.
+Milestone D: System complete
+
+* Server monitoring/reporting (M) 5
+* Windgust animation works
+* Tested device poweroffs
+* Tested server downtime
+* Tested full gust button
+* Tested connectivity loss
+
+
+Failure modes
+
++ I/O failure. Software does right thing, but right action does not happen
++ RPi fails to fetch server. 3G connection, HTTP error, server down
++ 
+
+## Worklog
+
+Date,person,hours,area
+
+    02.10.2018,jon,8,planning
+    02.10.2018,martin,8,planning
+
+Jon.
+project management 10-15
+server software 5-10
+device firmware base. 5-10
+
+20-35
+25
+
+Martin
+Project 15
+Electronics. 10-15
+Server. 10
+Device. 15
+
+50-55t
+
+70-90t
+
+## Status
+Power,booted,modem,SSH-call-home,servercomm,graphicservice,controlservice
+8 LEDS
+
+## System
+
+* Electronics (M)
+Fancontrol. 10 (modbus), 5 (analog)
+Valvecontrol.
+Statuspanel. 5
+
+
+* Device firmware
+Base setup. (Jon)
+Ansible. (Jon)
+Load data (Jon)
+Report FBP (Jon) 10
+USB modem (Jon) 5
+Windgust animation. Py1. (Martin) 10
+Interface electronics. Py1. (Martin)
+User logic. Py1. (Martin) 5
+Display graphics. C++ (Martin) 5
+Monitoring service. (Martin) 3
+
+* Server software.
+Ansible (Martin)
+SSH server for reverse
+Weatherdata scraper. (Jon) 10
+Monitoring/reporting (Martin) 
 
 ## Costs estimate
 
@@ -21,7 +151,7 @@ Valve control. 2000-3500 NOK
 
 Est 9500 NOK
 
-Server, SIMkort: 1500/aar
+Server,backup,domain,SIMkort: 2000/aar
 
 # Software
 

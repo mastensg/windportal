@@ -12,6 +12,9 @@ https://www.elefun.no/p/prod.aspx?v=39230
 Styrke  34kg ved 7,4V / 38kg ved 8,4V
 1020 kr
 
+LS-8101F                    13 kg cm
+https://no.mouser.com/ProductDetail/OSEPP-Electronics/LS-8101F?qs=sGAEpiMZZMu8c2wsui%252biYmlkd0O7x2MTCdeNraiOdu8%3d
+
 skjerm
 ------
 
@@ -32,3 +35,9 @@ rpi
 
 skruterminaler
 https://no.mouser.com/ProductDetail/Adafruit/2711?qs=%2fha2pyFadujC5EH09OyU7iyG3QL1hlg7khk9kmqPtHmUfQ%252bSwQAgwg%3d%3d
+
+rs485
+-----
+
+USB-COM485-PLUS1            220 kr
+https://no.mouser.com/ProductDetail/FTDI/USB-COM485-PLUS1?qs=sGAEpiMZZMt1Kg3wsyvxe%252bLLaQGiBr1h

@@ -33,11 +33,26 @@ https://no.mouser.com/ProductDetail/Molex/88768-9810?qs=sGAEpiMZZMtQmYd0M89TfUhP
 arduino
 -------
 
-skruterminaler
-https://www.digikey.com/product-detail/en/adafruit-industries-llc/196/1528-1047-ND/5011063
+leonardo                            190 kr
+https://no.mouser.com/ProductDetail/DFRobot/DFR0201?qs=sGAEpiMZZMve4%2fbfQkoj%252bDb9IQ86%2fTQcB8H6A%252blRfis%3d
+
+skruterminaler                      130 kr
+https://no.mouser.com/ProductDetail/Adafruit/196?qs=%2fha2pyFaduidPXPXSuFTA%252bjlPX%252bNS9r%252bknkpdluWv28akGK4ERwnMkqfH87Jn%252bFmPyMk4oUASeuIRwVFVXvPiQ%3d%3d
 
 rpi
 ---
+
+model 3b+                           440 kr
+https://no.mouser.com/ProductDetail/Raspberry-Pi/RPI3-MODBP-BULK?qs=sGAEpiMZZMtTz4c6chlxkDfAvxRwNyzNOQtVnSQ9aPgI9FBMuHLSyA%3d%3d
+
+sd industrial 8 GB                  100 kr
+https://no.mouser.com/ProductDetail/SanDisk/SDSDQAF3-008G-XI?qs=sGAEpiMZZMsIA2dzklOPMx82qmtwfZPlBJCiuUS964oSl6ZwWgIZFQ%3d%3d
+
+motstand (led)              270     14 kr / 100 stk
+https://no.mouser.com/ProductDetail/Yageo/CFR-25JT-52-270R?qs=sGAEpiMZZMtlubZbdhIBIFoOGUvNp40aQpaHJWY8dGI%3d
+
+motstand (knapp)            4.7k    10 kr / 100 stk
+https://no.mouser.com/ProductDetail/Yageo/CFR-25JT-52-4K7?qs=sGAEpiMZZMtlubZbdhIBIGhJWRsHPi3SRC60A9RSQDI%3d
 
 skruterminaler
 https://no.mouser.com/ProductDetail/Adafruit/2711?qs=%2fha2pyFadujC5EH09OyU7iyG3QL1hlg7khk9kmqPtHmUfQ%252bSwQAgwg%3d%3d

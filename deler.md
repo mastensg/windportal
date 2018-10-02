@@ -26,3 +26,9 @@ arduino
 
 skruterminaler
 https://www.digikey.com/product-detail/en/adafruit-industries-llc/196/1528-1047-ND/5011063
+
+rpi
+---
+
+skruterminaler
+https://no.mouser.com/ProductDetail/Adafruit/2711?qs=%2fha2pyFadujC5EH09OyU7iyG3QL1hlg7khk9kmqPtHmUfQ%252bSwQAgwg%3d%3d

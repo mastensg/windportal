@@ -2,3 +2,4 @@
 - hosts: hub
   roles:
     - network
+    - ssh-call-home-server

@@ -3,5 +3,6 @@
   become: True
   roles:
   - linux-base
+  - ssh-call-home-device
   - raspberrypi
 

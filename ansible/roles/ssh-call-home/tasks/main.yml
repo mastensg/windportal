@@ -1,0 +1,38 @@
+- name: SSH call home
+  block:
+  - name: Secrets
+    include_vars:
+      file: 'vault.yml'
+    no_log: no
+  - name: Add unprivileged user
+    user:
+      name: "{{ ssh_user }}"
+      state: present
+      groups: gpio
+  - name: SSH config dir
+    file:
+      dest: "/home/{{ ssh_user }}/.ssh"
+      owner: "{{ ssh_user }}"
+      state: directory
+  - name: SSH public key
+    copy:
+      content: "{{ ssh_public_key }}"
+      dest: "/home/{{ ssh_user }}/.ssh/id_rsa.pub"
+      owner: "{{ ssh_user }}"
+      mode: 0644
+  - name: SSH private key
+    copy:
+      content: "{{ ssh_private_key }}"
+      dest: "/home/{{ ssh_user }}/.ssh/id_rsa"
+      owner: "{{ ssh_user }}"
+      mode: 0600
+  - name: Copy service file
+    copy:
+      src: etc/systemd/system/dlock-call-home.service
+      dest: /etc/systemd/system/dlock-call-home.service
+  - name: Start service
+    systemd:
+      name: dlock-call-home
+      state: started 
+      enabled: yes
+      daemon_reload: yes # TODO, only restart on need

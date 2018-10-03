@@ -1,0 +1,10 @@
+---
+- name: Rapberry PI
+  tags: raspberrypi
+  block:
+  - name: Remove default pi user/pass
+    user:
+      name: pi
+      state: absent
+      remove: yes
+      force: yes # in case some process still uses the user

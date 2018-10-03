@@ -26,13 +26,17 @@
       dest: "/home/{{ ssh_user }}/.ssh/id_rsa"
       owner: "{{ ssh_user }}"
       mode: 0600
+  - name: Copy script
+    copy:
+      src: bin/ssh-call-home
+      dest: /usr/bin/ssh-call-home
   - name: Copy service file
     copy:
-      src: etc/systemd/system/dlock-call-home.service
-      dest: /etc/systemd/system/dlock-call-home.service
+      src: etc/systemd/system/ssh-call-home.service
+      dest: /etc/systemd/system/ssh-call-home.service
   - name: Start service
     systemd:
-      name: dlock-call-home
+      name: ssh-call-home
       state: started 
       enabled: yes
       daemon_reload: yes # TODO, only restart on need

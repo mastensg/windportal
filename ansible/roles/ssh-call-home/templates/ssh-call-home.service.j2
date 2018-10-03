@@ -4,8 +4,8 @@ ConditionPathExists=|/usr/bin
 After=network.target
 
 [Service]
-User=dlock-call-home
-ExecStart=/opt/dlock/src/firmware/dlock-call-home
+User={{ ssh_call_home_user }}
+ExecStart=/usr/bin/ssh-call-home {{ ssh_call_home_user }}@{{ ssh_call_home_host }}
 # Restart every >2 seconds to avoid StartLimitInterval failure
 RestartSec=10
 Restart=always

@@ -1,8 +1,7 @@
 - hosts: '{{ hosts }}'
   remote_user: '{{ user }}'
-  vars_files:
-  - roles/dlock-common/vars/main.yml
   become: True
   roles:
-  - 
+  - linux-base
+  - raspberrypi
 

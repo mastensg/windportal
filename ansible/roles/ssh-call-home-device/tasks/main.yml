@@ -12,14 +12,14 @@
   - name: SSH public key
     copy:
       content: "{{ ssh_call_home_public_key }}"
-      dest: "/home/{{ ssh_call_home }}/.ssh/id_rsa.pub"
-      owner: "{{ ssh_call_home }}"
+      dest: "/home/{{ ssh_call_home_user }}/.ssh/id_rsa.pub"
+      owner: "{{ ssh_call_home_user }}"
       mode: 0644
   - name: SSH private key
     copy:
       content: "{{ ssh_call_home_private_key }}"
       dest: "/home/{{ ssh_call_home_user }}/.ssh/id_rsa"
-      owner: "{{ ssh_user }}"
+      owner: "{{ ssh_call_home_user }}"
       mode: 0600
   - name: Copy script
     copy:

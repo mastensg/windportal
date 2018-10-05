@@ -33,7 +33,7 @@ https://no.mouser.com/ProductDetail/Molex/88768-9810?qs=sGAEpiMZZMtQmYd0M89TfUhP
 arduino
 -------
 
-leonardo                            190 kr
+leonardo                            190 kr      **backordered**
 https://no.mouser.com/ProductDetail/DFRobot/DFR0201?qs=sGAEpiMZZMve4%2fbfQkoj%252bDb9IQ86%2fTQcB8H6A%252blRfis%3d
 
 skruterminaler                      130 kr
@@ -48,8 +48,14 @@ https://no.mouser.com/ProductDetail/Raspberry-Pi/RPI3-MODBP-BULK?qs=sGAEpiMZZMtT
 sd industrial 8 GB                  100 kr
 https://no.mouser.com/ProductDetail/SanDisk/SDSDQAF3-008G-XI?qs=sGAEpiMZZMsIA2dzklOPMx82qmtwfZPlBJCiuUS964oSl6ZwWgIZFQ%3d%3d
 
+power supply                        100 kr
+https://no.mouser.com/ProductDetail/Raspberry-Pi/1101001000045?qs=sGAEpiMZZMve4%2fbfQkoj%252bMUp9oD6Abn1MSY4MW8Pkys%3d
+
 motstand (led)              270     14 kr / 100 stk
 https://no.mouser.com/ProductDetail/Yageo/CFR-25JT-52-270R?qs=sGAEpiMZZMtlubZbdhIBIFoOGUvNp40aQpaHJWY8dGI%3d
+
+motstand (led)              390     14 kr / 100 stk
+https://no.mouser.com/ProductDetail/Yageo/CFR-25JT-52-390R?qs=%2fha2pyFaduip15hodXcAQ9Cegj6MyAcd2BPgydrkHKQQkI9PbaFaag%3d%3d
 
 motstand (knapp)            4.7k    10 kr / 100 stk
 https://no.mouser.com/ProductDetail/Yageo/CFR-25JT-52-4K7?qs=sGAEpiMZZMtlubZbdhIBIGhJWRsHPi3SRC60A9RSQDI%3d
@@ -65,5 +71,10 @@ https://no.mouser.com/ProductDetail/FTDI/USB-COM485-PLUS1?qs=sGAEpiMZZMt1Kg3wsyv
 
 PWM to analog
 ---
-Optically isolated
+Optically isolated      **out of stock**
 https://www.banggood.com/PWM-To-Voltage-Conversion-Module-0-100-PWM-To-0-10V-Voltage-p-1223296.html?
+
+Aptinex DAC Module DA1C010BI I2C Digital to Analog 0-10V MCP4725    $30
+https://aptinex.com/product/aptinex-dac-module-da1c010bi-digital-to-analog-0-10v-mcp4725-i2c/
+
+https://www.duino.lt/duino/14450-arduino-pwm-signalo-keitiklis-i-0-51024v.html

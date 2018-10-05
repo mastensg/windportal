@@ -62,3 +62,8 @@ rs485
 
 USB-COM485-PLUS1            220 kr
 https://no.mouser.com/ProductDetail/FTDI/USB-COM485-PLUS1?qs=sGAEpiMZZMt1Kg3wsyvxe%252bLLaQGiBr1h
+
+PWM to analog
+---
+Optically isolated
+https://www.banggood.com/PWM-To-Voltage-Conversion-Module-0-100-PWM-To-0-10V-Voltage-p-1223296.html?

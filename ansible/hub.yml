@@ -4,3 +4,4 @@
     - linux-base
     - network
     - ssh-call-home-server
+    - sendgrid

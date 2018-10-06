@@ -1,0 +1,10 @@
+---
+- name: reconfigure exim4
+  become: yes
+  command: dpkg-reconfigure -fnoninteractive exim4-config
+
+- name: restart exim4
+  become: yes
+  service:
+    name: exim4
+    state: restarted

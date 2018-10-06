@@ -32,8 +32,9 @@ Milestone 0: Ready to work
 - [ ] Setup server. Linode,DNS,email,Mosquitto in Ansible (M) 5
     - [x] Linode
     - [x] DNS
-    - [ ] Sendgrid
+    - [x] Sendgrid
     - [ ] Mosquitto
+    - [ ] Unattended upgrades
     - [ ] Ansible configuration
 
 Wed 3 - Fri 5

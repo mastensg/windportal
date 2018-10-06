@@ -1,0 +1,13 @@
+######################################
+#                                    #
+#  This file is managed by ansible!  #
+#                                    #
+######################################
+
+user hub
+topic     write     displays/+/speed
+topic read          displays/+/speed/ack
+
+user display
+topic read          displays/+/speed
+topic     write     displays/+/speed/ack

@@ -5,3 +5,4 @@
     - network
     - ssh-call-home-server
     - sendgrid
+    - mosquitto-server

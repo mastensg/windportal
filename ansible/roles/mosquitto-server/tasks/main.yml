@@ -1,0 +1,33 @@
+---
+- name: mosquitto-server
+  tags: mosquitto-server
+  become: yes
+  block:
+    - name: Install mosquitto MQTT broker
+      apt:
+        name: "{{ item }}"
+        install_recommends: no
+      with_items:
+        - mosquitto
+
+    - name: Mosquitto configuration directory
+      file:
+        dest: "/etc/mosquitto/conf.d"
+        state: directory
+
+    - name: Mosquitto configuration files
+      copy:
+        src: "{{ item }}"
+        dest: "/{{ item }}"
+        owner: "mosquitto"
+      with_items:
+        - etc/mosquitto/.gitignore
+        - etc/mosquitto/acl
+        - etc/mosquitto/conf.d/ansible.conf
+      notify: restart mosquitto
+
+    - name: Mosquitto password file
+      copy:
+        content: "{{ mqtt_passwd }}"
+        dest: "/etc/mosquitto/passwd"
+      notify: restart mosquitto

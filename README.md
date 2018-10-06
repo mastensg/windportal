@@ -30,7 +30,7 @@ Milestone 0: Ready to work
 - [ ] Setup firmware base (J)
 - [ ] Fetch data using YR (J) 3
 - [ ] Setup server. Linode,DNS,email,Mosquitto in Ansible (M) 5
-    - [ ] Linode
+    - [x] Linode
     - [x] DNS
     - [ ] Sendgrid
     - [ ] Mosquitto

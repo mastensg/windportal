@@ -7,3 +7,7 @@ initial run as root:
     ssh root@hub.wind.mastensg.net true
 
     ansible-playbook hub.yml -k -u root
+
+after the first run:
+
+    ansible-playbook hub.yml

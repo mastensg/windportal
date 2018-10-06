@@ -1,3 +1,4 @@
+---
 - hosts: '{{ hosts }}'
   remote_user: '{{ user }}'
   become: True
@@ -5,4 +6,3 @@
   - linux-base
   - ssh-call-home-device
   - raspberrypi
-

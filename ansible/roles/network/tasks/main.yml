@@ -1,3 +1,4 @@
+---
 - name: configure name resolution
   tags: network
   copy:

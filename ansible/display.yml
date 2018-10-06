@@ -1,5 +1,7 @@
 ---
-- hosts: doors
+- hosts: displays
   roles:
+    - linux-base
+    - ssh-call-home-device
+    - raspberrypi
     - network
-    - ssh-call-home

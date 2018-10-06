@@ -1,37 +1,44 @@
+---
 - name: SSH call home
   block:
-  - name: Add unprivileged user
-    user:
-      name: "{{ ssh_call_home_user }}"
-      state: present
-  - name: SSH config dir
-    file:
-      dest: "/home/{{ ssh_call_home_user }}/.ssh"
-      owner: "{{ ssh_call_home_user }}"
-      state: directory
-  - name: SSH public key
-    copy:
-      content: "{{ ssh_call_home_public_key }}"
-      dest: "/home/{{ ssh_call_home_user }}/.ssh/id_rsa.pub"
-      owner: "{{ ssh_call_home_user }}"
-      mode: 0644
-  - name: SSH private key
-    copy:
-      content: "{{ ssh_call_home_private_key }}"
-      dest: "/home/{{ ssh_call_home_user }}/.ssh/id_rsa"
-      owner: "{{ ssh_call_home_user }}"
-      mode: 0600
-  - name: Copy script
-    copy:
-      src: bin/ssh-call-home
-      dest: /usr/bin/ssh-call-home
-  - name: Copy service file
-    copy:
-      src: etc/systemd/system/ssh-call-home.service
-      dest: /etc/systemd/system/ssh-call-home.service
-  - name: Start service
-    systemd:
-      name: ssh-call-home
-      state: started 
-      enabled: yes
-      daemon_reload: yes # TODO, only restart on need
+    - name: Add unprivileged user
+      user:
+        name: "{{ ssh_call_home_user }}"
+        state: present
+
+    - name: SSH config dir
+      file:
+        dest: "/home/{{ ssh_call_home_user }}/.ssh"
+        owner: "{{ ssh_call_home_user }}"
+        state: directory
+
+    - name: SSH public key
+      copy:
+        content: "{{ ssh_call_home_public_key }}"
+        dest: "/home/{{ ssh_call_home_user }}/.ssh/id_rsa.pub"
+        owner: "{{ ssh_call_home_user }}"
+        mode: 0644
+
+    - name: SSH private key
+      copy:
+        content: "{{ ssh_call_home_private_key }}"
+        dest: "/home/{{ ssh_call_home_user }}/.ssh/id_rsa"
+        owner: "{{ ssh_call_home_user }}"
+        mode: 0600
+
+    - name: Copy script
+      copy:
+        src: usr/bin/ssh-call-home
+        dest: /usr/bin/ssh-call-home
+
+    - name: Copy service file
+      template:
+        src: etc/systemd/system/ssh-call-home.service.j2
+        dest: /etc/systemd/system/ssh-call-home.service
+
+    - name: Start service
+      systemd:
+        name: ssh-call-home
+        state: started
+        enabled: yes
+        daemon_reload: yes # TODO, only restart on need

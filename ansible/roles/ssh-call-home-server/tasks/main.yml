@@ -2,18 +2,20 @@
 - name: SSH call home server
   tags: ssh-call-home-server
   block:
-  - name: Add unprivileged user
-    user:
-      name: "{{ ssh_call_home_user }}"
-      state: present
-  - name: SSH config dir
-    file:
-      dest: "/home/{{ ssh_call_home_user }}/.ssh"
-      owner: "{{ ssh_call_home_user }}"
-      state: directory
-  - name: SSH device authorized_keys
-    authorized_key:
-      user: "{{ ssh_call_home_user }}"
-      state: present
-      key: "{{ ssh_call_home_public_key }}"
+    - name: Add unprivileged user
+      user:
+        name: "{{ ssh_call_home_user }}"
+        state: present
+
+    - name: SSH config dir
+      file:
+        dest: "/home/{{ ssh_call_home_user }}/.ssh"
+        owner: "{{ ssh_call_home_user }}"
+        state: directory
+
+    - name: SSH device authorized_keys
+      authorized_key:
+        user: "{{ ssh_call_home_user }}"
+        state: present
+        key: "{{ ssh_call_home_public_key }}"
 

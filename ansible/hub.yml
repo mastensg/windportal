@@ -1,5 +1,6 @@
 ---
 - hosts: hub
   roles:
+    - linux-base
     - network
     - ssh-call-home-server

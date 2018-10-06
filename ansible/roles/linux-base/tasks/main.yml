@@ -1,0 +1,33 @@
+---
+- name: Linux base
+  tags: linux-base
+  block:
+    - name: Packages
+      apt:
+        name: "{{ item }}"
+        install_recommends: no
+      with_items:
+        - git
+        - etckeeper
+
+    - name: superuser nopasswd sudo
+      copy:
+        content: |
+          %sudo ALL=(ALL) NOPASSWD: ALL
+        dest: /etc/sudoers.d/020_sudo-group-nopasswd
+
+    - name: superuser accounts
+      user:
+        name: "{{ item.username }}"
+        groups: sudo,systemd-journal
+        append: yes
+      with_items:
+        - "{{ superusers }}"
+
+    - name: superuser authorized_keys
+      authorized_key:
+        user: "{{ item.username }}"
+        state: present
+        key: "{{ item.authorized_keys }}"
+      with_items:
+        - "{{ superusers }}"

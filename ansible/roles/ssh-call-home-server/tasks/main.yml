@@ -1,5 +1,6 @@
+---
 - name: SSH call home server
-  tag: ssh-call-home-server
+  tags: ssh-call-home-server
   block:
   - name: Add unprivileged user
     user:

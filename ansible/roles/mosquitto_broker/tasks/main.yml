@@ -1,6 +1,6 @@
 ---
-- name: mosquitto-server
-  tags: mosquitto-server
+- name: mosquitto_broker
+  tags: mosquitto_broker
   become: yes
   block:
     - name: Install mosquitto MQTT broker

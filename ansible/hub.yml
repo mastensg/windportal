@@ -6,3 +6,5 @@
     - ssh-call-home-server
     - sendgrid
     - mosquitto-server
+    - unattended_upgrades
+    - root_alias

@@ -57,11 +57,3 @@
     - "{{ sendgrid_passwd }}"
   no_log: True
   notify: restart exim4
-
-- name: "Configure exim4 for SendGrid, mastensg alias"
-  tags: sendgrid
-  become: yes
-  lineinfile:
-    dest: /etc/aliases
-    line: "mastensg: mastensg@mastensg.net"
-    regexp: "^mastensg:"

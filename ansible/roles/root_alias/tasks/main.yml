@@ -1,0 +1,10 @@
+---
+- name: root_alias
+  tags: root_alias
+  become: yes
+  block:
+    - name: "Email alias for root"
+      lineinfile:
+        dest: /etc/aliases
+        line: "root: {{ root_alias }}"
+        regexp: "^root:"

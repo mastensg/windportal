@@ -1,3 +1,4 @@
+---
 superusers:
   - username: jonnor
     state: present

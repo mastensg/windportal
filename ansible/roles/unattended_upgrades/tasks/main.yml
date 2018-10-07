@@ -1,0 +1,38 @@
+---
+- name: unattended_upgrades
+  tags: unattended_upgrades
+  become: yes
+  block:
+    - name: Packages for unattended upgrades
+      apt:
+        name: "{{ item }}"
+        install_recommends: no
+      with_items:
+        - unattended-upgrades
+        - apt-listchanges
+
+    - name: Configure /etc/apt/apt.conf.d/50unattended-upgrades
+      copy:
+        dest: /etc/apt/apt.conf.d/50unattended-upgrades
+        content: |
+          Unattended-Upgrade::Origins-Pattern {
+              "origin=Debian,codename=${distro_codename},label=Debian";
+              "origin=Debian,codename=${distro_codename}-updates,label=Debian";
+              "origin=Debian,codename=${distro_codename},label=Debian-Security";
+          }
+          Unattended-Upgrade::MinimalSteps "True";
+          Unattended-Upgrade::Mail "root";
+          Unattended-Upgrade::MailOnlyOnError "False";
+
+    - name: Configure /etc/apt/apt.conf.d/20auto-upgrades
+      copy:
+        dest: /etc/apt/apt.conf.d/20auto-upgrades
+        content: |
+          APT::Periodic::Update-Package-Lists "1";
+          APT::Periodic::Unattended-Upgrade "1";
+
+    - name: Configure /etc/apt/listchanges.conf
+      lineinfile:
+        dest: /etc/apt/listchanges.conf
+        line: "email_address=root"
+        regexp: "^email_address="

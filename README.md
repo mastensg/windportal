@@ -29,18 +29,12 @@ Milestone 0: Ready to work
 - [ ] Setup RPi3b+ base (J)
 - [ ] Setup firmware base (J)
 - [ ] Fetch data using YR (J) 3
-- [ ] Setup server. Linode,DNS,email,Mosquitto in Ansible (M) 5
-    - [x] Linode
-    - [x] DNS
-    - [x] Sendgrid
-    - [x] Mosquitto
-    - [ ] Unattended upgrades
-    - [ ] Ansible configuration
+- [x] Setup server. Linode,DNS,email,Mosquitto in Ansible (M) 5
 
 Wed 3 - Fri 5
 Milestone A: Device-Server datapaths ready
 
-- [ ] Server is deployed
+- [x] Server is deployed
 - [ ] Server fetches current wind data from API
 - [ ] Device can fetch current wind data from server
 - [ ] RPI automatically sets up reverse SSH
@@ -69,7 +63,7 @@ Milestone C: I/O complete, from RPi
 
 - [ ] Turn status LEDs on/off
 - [ ] Get user button status (turn on)
-- [ ] Get adjust potiometer (power level)
+- [ ] Get adjust potentiometer (power level)
 - [ ] Get test button stats (full power)
 - [ ] Set valve position
 - [ ] Set fan power

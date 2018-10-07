@@ -1,0 +1,55 @@
+---
+- name: exim4_sendgrid
+  tags: exim4_sendgrid
+  become: yes
+  block:
+    - name: "Exim4 mail server"
+      apt:
+        name: "{{ item }}"
+        install_recommends: no
+      with_items:
+        - exim4-daemon-light
+        - mailutils
+        - swaks
+
+    - name: "Remove exim4 config file"
+      file:
+        path: "/etc/exim4/update-exim4.conf.conf"
+        state: absent
+
+    - name: "Configure exim4 for SendGrid"
+      debconf:
+        name: exim4-config
+        question: "{{ item.question }}"
+        value: "{{ item.value }}"
+        vtype: "{{ item.vtype }}"
+      with_items:
+        - question: "exim4/dc_eximconfig_configtype"
+          value: "mail sent by smarthost; no local mail"
+          vtype: select
+        - question: "exim4/dc_other_hostnames"
+          value: ""
+          vtype: string
+        - question: "exim4/dc_postmaster"
+          value: "{{ exim4_sendgrid_postmaster }}"
+          vtype: string
+        - question: "exim4/dc_readhost"
+          value: "{{ exim4_sendgrid_domain }}"
+          vtype: string
+        - question: "exim4/dc_smarthost"
+          value: "smtp.sendgrid.net::2525"
+          vtype: string
+        - question: "exim4/hide_mailname"
+          value: "true"
+          vtype: boolean
+      notify: reconfigure exim4
+
+    - name: "Configure exim4 for SendGrid, passwd"
+      lineinfile:
+        dest: /etc/exim4/passwd.client
+        line: "{{ item.host }}:{{ item.username }}:{{ item.password }}"
+        regexp: "^{{ item.host|regex_escape() }}"
+      with_items:
+        - "{{ exim4_sendgrid_passwd }}"
+      no_log: True
+      notify: restart exim4

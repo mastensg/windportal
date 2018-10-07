@@ -4,7 +4,7 @@
     - linux-base
     - network
     - ssh-call-home-server
-    - sendgrid
+    - exim4_sendgrid
     - mosquitto-server
     - unattended_upgrades
     - root_alias

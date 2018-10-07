@@ -5,3 +5,4 @@
     - ssh-call-home-device
     - raspberrypi
     - network
+    - display-firmware

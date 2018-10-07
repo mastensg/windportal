@@ -1,0 +1,59 @@
+- name: Display firmware
+  tags: display-firmware
+  block:
+  - name: Install system dependencies
+    apt:
+      name:
+      - python3-pip
+      - python-setuptools
+      - virtualenv
+      - rsync
+  - name: unprivileged user
+    user:
+      name: display
+      state: present
+      groups: gpio
+  - name: firmware root dir
+    file:
+      path: /opt/windmachine/firmware
+      owner: display
+      group: display
+      state: directory
+  - name: Copy firmware code
+    synchronize:
+      src: '../../firmware/'
+      dest: /opt/windmachine/firmware
+      delete: yes
+      archive: yes
+  - name: Set permissions
+    file:
+      path: /opt/windmachine
+      recurse: true
+      owner: display
+      group: display
+  - name: Install Python packages
+    pip:
+      chdir: '/opt/windmachine/firmware'
+      requirements: './requirements.txt'
+      virtualenv: /opt/windmachine/venv
+      virtualenv_python: '/usr/bin/python3.5'
+  - name: Service config dir
+    file:
+      path: /etc/windmachine
+      state: directory
+  - name: Provide settings as environment vars 
+    copy:
+      content: |
+        MSGFLO_BROKER={{display_broker_url}}
+        DISPLAY_PREFIX=display/{{ansible_hostname}}
+      dest: /etc/windmachine/display.env
+  - name: Copy service file
+    copy:
+      src: etc/systemd/system/display-firmware.service
+      dest: /etc/systemd/system/display-firmware.service
+  - name: Start systemd service
+    systemd:
+      name: display-firmware
+      state: restarted # TODO, only restart when needed 
+      enabled: yes
+      daemon_reload: yes # TODO, only restart on need

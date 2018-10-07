@@ -2,3 +2,4 @@
 *.retry
 .vault_pass
 __pycache__
+*.windspeed.txt

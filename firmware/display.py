@@ -56,7 +56,8 @@ def next_state(current : State, inputs : Inputs):
   fan_speed = map_linear(i.windspeed + gust, 0.0, 30.0, 0.0, 1.0)
 
   state = State(
-    fan_speed = fan_speed 
+    fan_speed = fan_speed,
+    connected_led = i.mqtt_connected, 
   )
 
   return state

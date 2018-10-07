@@ -7,6 +7,7 @@ import gevent
 
 import os.path
 
+BROKER = os.environ.get('MSGFLO_BROKER', 'mqtt://localhost')
 
 # Helper for running one iteration of next_state()
 def run_next(state, inputs):
@@ -33,7 +34,7 @@ def create_mqtt_client(broker_url):
     if broker_info.username:
         client.username_pw_set(broker_info.username, broker_info.password)
 
-    client.reconnect_delay_set(min_delay=1, max_delay=2*60)
+    client.reconnect_delay_set(min_delay=0.1, max_delay=2*60)
 
     host = broker_info.hostname
     default_port = 1883
@@ -47,12 +48,13 @@ def create_mqtt_client(broker_url):
 
     return client, host, port
 
-@pytest.fixture(scope="module")
+@pytest.fixture()
 def mqtt_client():
-    broker_url = os.environ.get('MSGFLO_BROKER', 'mqtt://localhost')
-    mqtt_client, host, port = create_mqtt_client(broker_url)
-    timeout = 5
-    mqtt_client.connect(host, port, timeout)
+    mqtt_client, host, port = create_mqtt_client(BROKER)
+    timeout = 2
+    r = mqtt_client.connect(host, port, timeout)
+
+    gevent.sleep(0.5)
     yield mqtt_client
     mqtt_client.disconnect()
 
@@ -60,7 +62,9 @@ def mqtt_client():
 def participant():
     role = 'testdisplay/0'
     participant = display.Participant(role)
-    engine = msgflo.run([participant])
+    engine = msgflo.run([participant], broker=BROKER)
+    gevent.sleep(0.2)
+    assert participant._engine.connected
     yield participant
     engine._client = None # disconnect
 
@@ -71,7 +75,9 @@ def test_mqtt_windspeed_update(participant, mqtt_client):
 
     role = participant.definition['role']
     topic = role + '/windspeed'
+    print('sending to', topic)
     assert 'testdisplay/0' in topic
+    participant.recalculate_state()
     assert participant.inputs.windspeed == 0.0
 
     # Send new windspeed
@@ -81,8 +87,8 @@ def test_mqtt_windspeed_update(participant, mqtt_client):
     # FIXME: check get response
     # check was written to disk
     assert participant.inputs.windspeed == 13.44
-    assert os.path.exists(participant.windspeed_file)
-    
+    assert os.path.exists(participant.windspeed_file) 
+
 def test_windspeed_load_disk():
     participant = display.Participant('testdisplay/1')
     if os.path.exists(participant.windspeed_file):

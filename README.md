@@ -33,7 +33,7 @@ Milestone 0: Ready to work
     - [x] Linode
     - [x] DNS
     - [x] Sendgrid
-    - [ ] Mosquitto
+    - [x] Mosquitto
     - [ ] Unattended upgrades
     - [ ] Ansible configuration
 

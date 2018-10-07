@@ -33,10 +33,10 @@
       value: ""
       vtype: string
     - question: "exim4/dc_postmaster"
-      value: "mastensg"
+      value: "{{ exim4_sendgrid_postmaster }}"
       vtype: string
     - question: "exim4/dc_readhost"
-      value: "sg.wind.mastensg.net"
+      value: "{{ exim4_sendgrid_domain }}"
       vtype: string
     - question: "exim4/dc_smarthost"
       value: "smtp.sendgrid.net::2525"

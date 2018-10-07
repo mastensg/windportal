@@ -1,0 +1,3 @@
+---
+exim4_sendgrid_postmaster: mastensg
+exim4_sendgrid_domain: sg.wind.mastensg.net

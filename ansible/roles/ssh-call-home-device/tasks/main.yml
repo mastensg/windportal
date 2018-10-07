@@ -1,5 +1,6 @@
 ---
 - name: SSH call home
+  tags: ssh-call-home
   block:
     - name: Add unprivileged user
       user:
@@ -30,6 +31,7 @@
       copy:
         src: usr/bin/ssh-call-home
         dest: /usr/bin/ssh-call-home
+        mode: 0755
 
     - name: Copy service file
       template:

@@ -1,7 +1,13 @@
 
 ## Initalize device from base image
 
-    ansible-playbook display-base.yml --extra-vars "hosts=display0 user=pi" --ask-pass
+On first run you need to use default `pi` user. This should only be done on a private Ethernet connection.
+
+    ansible-playbook display.yml -l display0 --user pi --ask-pass
+
+Afterwards the SSH keys are in place
+
+    ansible-playbook display.yml -l display0
 
 ## Make base image
 To make something flashable of a known size (under 8GB) with a known hostname.
@@ -22,4 +28,4 @@ To make something flashable of a known size (under 8GB) with a known hostname.
 ## Flash base image
 
 
-    gunzip -c display0.img | sudo dd of=/dev/MYSCARD status=progress oflag=sync bs=1M
+    gunzip -c display0-rasbian.img | sudo dd of=/dev/MYSCARD status=progress oflag=sync bs=1M

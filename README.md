@@ -13,8 +13,8 @@ Key questions
 
 - [x] OK with FOSS (Sjur)
 - [ ] Measure/test valve control. torque/speed. (dep: Peter)
-- [ ] Fan control interface. Analog or modbus (dep: Peter)
-- [ ] OK with LCD display, or other (dep: Sjur)
+- [x] Fan control interface. Analog or modbus 
+- [x] OK with LCD display, or other
 - [ ] Decide ownership domain,server,SIM (dep: Sjur)
 
 Risk moments
@@ -24,10 +24,11 @@ Risk moments
 
 Milestone 0: Ready to work
 
-- [ ] Copy Ansible skeleton (J) 5
+- [x] Copy Ansible skeleton (J) 5
 - [ ] Define MQTT interface (J)
-- [ ] Setup RPi3b+ base (J)
-- [ ] Setup firmware base (J)
+- [x] Setup RPi3b+ base (J)
+- [x] Setup firmware base (J)
+- [ ] Setup 3G modem on RPI (J)
 - [ ] Fetch data using YR (J) 3
 - [x] Setup server. Linode,DNS,email,Mosquitto in Ansible (M) 5
 
@@ -37,7 +38,7 @@ Milestone A: Device-Server datapaths ready
 - [x] Server is deployed
 - [ ] Server fetches current wind data from API
 - [ ] Device can fetch current wind data from server
-- [ ] RPI automatically sets up reverse SSH
+- [x] RPI automatically sets up reverse SSH
 - [ ] Server reports last seen time basic. 2
 - [ ] Fetch data using HTML page (J) 3
 
@@ -92,6 +93,8 @@ Date,person,hours,area
 
     02.10.2018,jon,8,planning
     02.10.2018,martin,8,planning
+    03.10.2018,jon,2,firmware
+    07.10.2018,jon,4,firmware
 
 Jon.
 project management 10-15

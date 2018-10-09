@@ -80,6 +80,28 @@ https://aptinex.com/product/aptinex-dac-module-da1c010bi-digital-to-analog-0-10v
 https://www.duino.lt/duino/14450-arduino-pwm-signalo-keitiklis-i-0-51024v.html
 
 
+3/4G modem
+---
+
+Huawei E3372
+https://consumer.huawei.com/en/mobile-broadband/e3372/specs/ says
+Popular USB with external antenna support
+https://prisguiden.no/produkt/huawei-e3372-246441
+Available locally in Oslo
+https://www.teknikmagasinet.no/produkter/gaming-data/nettverk/4g-routere/huawei-e3372h-153-4g-usb-modem?utm_source=prisguide&utm_medium=cpc&utm_campaign=feed
+
+Connector:  CRC-9, aka TS-5
+x2, for MIMO antenna
+
+Overgang til SMA
+https://www.kjell.com/no/produkter/data-og-nettverk/nettverk/mobilt-bredband/adapter/antenneadapter-sma-til-crc-9-p30854
+
+Industrial module, USB interface
+https://www.digikey.com/product-detail/en/sierra-wireless/GL8200-INT_1102574/1645-1010-ND/5843807
+
+Serial modules. Theoretically works with PPP
+https://www.digikey.com/products/en/development-boards-kits-programmers/evaluation-boards-expansion-boards-daughter-cards/797?FV=ffe0031d&quantity=0&ColumnSort=1000011&page=1&stock=1&k=gprs&pageSize=25&pkeyword=gprs
+
 
 # Components
 

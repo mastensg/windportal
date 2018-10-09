@@ -10,6 +10,7 @@ Risk moments
 
 - [ ] Interfacing fan,display
 - [ ] Data communication device,server,datasource
+- [ ] In-field failures
 
 ## Deadlines
 
@@ -48,12 +49,13 @@ Milestone DISPLAY:
 RPI ready
 
 - [x] RPI automatically sets up reverse SSH (J)
-- [ ] Setup 3G modem on RPI (J)
+- [ ] Setup/test 3G modem on RPI (J)
 - [ ] Test/fix Firmata at same time as ModemManager, ttyACMx. (J)
+Hints about udev mechanisms. `ID_MM_CANDIDATE` and `ID_MM_PLATFORM_DRIVER_PROBE`
+https://askubuntu.com/questions/740584/enabling-serial-network-devices-with-modemmanager
 - [ ] Device can fetch current wind data from server (J)
 
-Wed 3 - Fri 5
-Server datafetching ready
+Server datafetching
 
 - [ ] Define MQTT interface (J)
 - [ ] Server fetches data using YR (J) 3
@@ -63,6 +65,11 @@ Monitoring
 
 - [ ] Device reports heartbeat to server on MQTT (`fbp`)
 - [ ] Server stores heartbeat events
+
+Windgust animation
+
+- [ ] First version. Should depend on (average) windspeed
+- [ ] (optional) Try to make fan changes faster, over Modbus
 
 Mon 8
 Milestone B: All electronics assembled (M)
@@ -74,7 +81,7 @@ Milestone B: All electronics assembled (M)
 - [ ] Potmeter in control panel
 - [ ] Test button in control panel
 - [ ] User button plugged in
-- [ ] Display connected over HDMI
+- [ ] Display connected
 - [ ] Fan power module connected
 
 Fri 12 - Mon 16

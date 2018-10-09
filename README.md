@@ -62,6 +62,7 @@ Milestone B: All electronics assembled
 Fri 12 - Mon 15
 Milestone C: I/O complete, from RPi
 
+- [ ] Test/fix Firmata at same time as ModemManager
 - [ ] Turn status LEDs on/off
 - [ ] Get user button status (turn on)
 - [ ] Get adjust potentiometer (power level)

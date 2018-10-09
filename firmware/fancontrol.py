@@ -13,7 +13,7 @@ def toggle(board):
     board.digital_write(2, True)
 
 def main():
-    port = '/dev/ttyUSB0'
+    port = '/dev/ttyACM0'
 
     board = PyMata(port, verbose=True)
 

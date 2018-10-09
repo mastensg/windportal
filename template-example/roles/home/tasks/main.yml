@@ -1,9 +1,0 @@
----
-- name: home templates
-  tags: home, home_templates
-  template:
-    src: "{{ item.path }}"
-    dest: "~/{{ item.path | splitext | first }}"
-    mode: "{{ item.mode | mode_mask('0700') }}"
-  with_filetree: ../templates
-  when: (item.state == "file") and (item.path | splitext | last == ".j2")

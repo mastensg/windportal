@@ -3,53 +3,75 @@ An interactive installation demonstrating the power of the wind.
 
 ## Status
 
-## TODO
-
-Tuesday
-
-- [x] Estimate hours / cost for project
-
 Key questions
 
 - [x] OK with FOSS (Sjur)
-- [ ] Measure/test valve control. torque/speed. (dep: Peter)
 - [x] Fan control interface. Analog or modbus 
-- [x] OK with LCD display, or other
+- [ ] LCD display, dial indicator or 7-segment. ! may need more hardware
 - [ ] Decide ownership domain,server,SIM (dep: Sjur)
 
 Risk moments
 
-- [ ] Interfacing fan,valve control
-- [ ] Data communication
+- [ ] Interfacing fan,display
+- [ ] Data communication device,server,datasource
+
+## Deadlines
+
+
+### Tuesday 16 October
+- Specification frozen.
+- Decided display type
+- All electronics/hardware ordered.
+
+## Done
+
+Kickoff
+
+- [x] Estimate hours / cost for project
 
 Milestone 0: Ready to work
 
 - [x] Copy Ansible skeleton (J) 5
-- [ ] Define MQTT interface (J)
 - [x] Setup RPi3b+ base (J)
 - [x] Setup firmware base (J)
-- [ ] Setup 3G modem on RPI (J)
-- [ ] Fetch data using YR (J) 3
 - [x] Setup server. Linode,DNS,email,Mosquitto in Ansible (M) 5
+- [x] Server is deployed
+
+Milestone FANCONTROL:
+
+- [x] Tested control of fan from software (via Firmata, analog/PWM) 
+
+## TODO
+
+Milestone DISPLAY:
+
+- [ ] Test servocontrol for dial type display. Incl a simple hand. (M)
+- [ ] ... pending decision ...
+- [ ] Test if 7-segment module bright enough (M)
+
+RPI ready
+
+- [x] RPI automatically sets up reverse SSH (J)
+- [ ] Setup 3G modem on RPI (J)
+- [ ] Test/fix Firmata at same time as ModemManager, ttyACMx. (J)
+- [ ] Device can fetch current wind data from server (J)
 
 Wed 3 - Fri 5
-Milestone A: Device-Server datapaths ready
+Server datafetching ready
 
-- [x] Server is deployed
-- [ ] Server fetches current wind data from API
-- [ ] Device can fetch current wind data from server
-- [x] RPI automatically sets up reverse SSH
-- [ ] Server reports last seen time basic. 2
-- [ ] Fetch data using HTML page (J) 3
+- [ ] Define MQTT interface (J)
+- [ ] Server fetches data using YR (J) 3
+- [ ] Fetch data using scraped HTML page (J) 3
 
-Milestone E: All electronics/hardware ordered.
-Fri 5 - Mon 8.
+Monitoring
 
-- [ ] Resolve questions
+- [ ] Device reports heartbeat to server on MQTT (`fbp`)
+- [ ] Server stores heartbeat events
 
 Mon 8
-Milestone B: All electronics assembled
+Milestone B: All electronics assembled (M)
 
+- [ ] Optocoupler for fancontrol. Non-inverting
 - [ ] RPi powered and running
 - [ ] Arduino with daughterboard
 - [ ] LEDs in control panel
@@ -59,24 +81,23 @@ Milestone B: All electronics assembled
 - [ ] Display connected over HDMI
 - [ ] Fan power module connected
 
-Fri 12 - Mon 15
-Milestone C: I/O complete, from RPi
+Fri 12 - Mon 16
+Milestone C: I/O complete, from RPi (M)
 
-- [ ] Test/fix Firmata at same time as ModemManager
 - [ ] Turn status LEDs on/off
 - [ ] Get user button status (turn on)
 - [ ] Get adjust potentiometer (power level)
 - [ ] Get test button stats (full power)
-- [ ] Set valve position
 - [ ] Set fan power
 - [ ] Show text on display
 
 Thurs 25.
 Milestone D: System complete
 
-- [ ] Server monitoring/reporting (M) 5
+- [ ] Monitoring exists
 - [ ] Windgust animation works
 - [ ] Tested device poweroffs
+- [ ] Tested device disconnect/reconnect
 - [ ] Tested server downtime
 - [ ] Tested full gust button
 - [ ] Tested connectivity loss
@@ -96,24 +117,9 @@ Date,person,hours,area
     02.10.2018,martin,8,planning
     03.10.2018,jon,2,firmware
     07.10.2018,jon,4,firmware
+    09.10.2018,jon,1,planning
+    09.10.2018,jon,4,io
 
-Jon.
-project management 10-15
-server software 5-10
-device firmware base. 5-10
-
-20-35
-25
-
-Martin
-Project 15
-Electronics. 10-15
-Server. 10
-Device. 15
-
-50-55t
-
-70-90t
 
 ## Status
 Power,booted,modem,SSH-call-home,servercomm,graphicservice,controlservice

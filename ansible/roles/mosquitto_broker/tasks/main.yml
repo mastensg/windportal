@@ -3,30 +3,38 @@
   tags: mosquitto_broker
   become: yes
   block:
-    - name: Install mosquitto MQTT broker
+    - name: Install packages
       apt:
         name: "{{ item }}"
         install_recommends: no
       with_items:
         - mosquitto
 
-    - name: Mosquitto configuration directory
+    - name: Configuration directory
       file:
         dest: "/etc/mosquitto/conf.d"
         state: directory
 
-    - name: Mosquitto configuration files
+    - name: Configuration files
       copy:
         src: "{{ item }}"
         dest: "/{{ item }}"
         owner: "mosquitto"
       with_items:
         - etc/mosquitto/.gitignore
+      notify: restart mosquitto
+
+    - name: Configuration templates
+      template:
+        src: "{{ item }}.j2"
+        dest: "/{{ item }}"
+        owner: "mosquitto"
+      with_items:
         - etc/mosquitto/acl
         - etc/mosquitto/conf.d/ansible.conf
       notify: restart mosquitto
 
-    - name: Mosquitto password file
+    - name: Password file
       copy:
         content: "{{ mqtt_passwd }}"
         dest: "/etc/mosquitto/passwd"

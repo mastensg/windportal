@@ -1,0 +1,17 @@
+---
+mosquitto_acl: |
+  user hub
+  topic     write     displays/+/speed
+  topic read          displays/+/speed/ack
+
+  user display
+  topic read          displays/+/speed
+  topic     write     displays/+/speed/ack
+
+mosquitto_conf: |
+  log_dest stdout
+  #log_type all
+
+  allow_anonymous false
+  acl_file /etc/mosquitto/acl
+  password_file /etc/mosquitto/passwd

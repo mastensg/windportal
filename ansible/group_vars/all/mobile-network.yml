@@ -1,0 +1,3 @@
+mobile_network_apn: 'telenor'
+mobile_network_number: '*99#'
+mobile_network_autoconnect: 'true'

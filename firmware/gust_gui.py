@@ -2,23 +2,13 @@ import matplotlib as mpl
 import numpy as np
 import sys
 import tkinter as tk
+import time
 import matplotlib.backends.tkagg as tkagg
 from matplotlib.backends.backend_agg import FigureCanvasAgg
 
-import zmq
+import firmata_ipc
 
-the_zmq_context = zmq.Context()
-
-the_zmq_publisher = the_zmq_context.socket(zmq.PUB)
-the_zmq_publisher.connect("ipc://zmq_ipc")
-
-the_zmq_subscriber = the_zmq_context.socket(zmq.SUB)
-the_zmq_subscriber.connect("ipc://zmq_ipc")
-the_zmq_subscriber.setsockopt(zmq.SUBSCRIBE, b"potentiometer")
-
-the_zmq_poller = zmq.Poller()
-the_zmq_poller.register(the_zmq_subscriber, zmq.POLLIN)
-
+the_ipc_session = firmata_ipc.Session()
 
 def draw_figure(canvas, figure, loc=(0, 0)):
     """ Draw a matplotlib figure onto a Tk canvas
@@ -92,12 +82,6 @@ def print_wind_speed():
 
 print_wind_speed()
 
-
-def potentiometer_change(s_str):
-    s = float(s_str)
-    print("potentiometer", s)
-
-
 the_potentiometer = tk.Scale(
     the_window,
     from_=0.0,
@@ -106,13 +90,13 @@ the_potentiometer = tk.Scale(
     orient=tk.HORIZONTAL,
     label="potentiometer",
     length=300,
-    command=potentiometer_change)
+    command=None)
 the_potentiometer.pack()
 
 
 def gauge_change(s_str):
-    s = float(s_str)
-    the_zmq_publisher.send_string("gauge {}".format(s))
+    s = int(float(s_str))
+    the_ipc_session.send("gauge_degrees", s)
 
 
 the_gauge = tk.Scale(
@@ -121,28 +105,21 @@ the_gauge = tk.Scale(
     to=180.0,
     resolution=0.1,
     orient=tk.HORIZONTAL,
-    label="gauge angle",
+    label="gauge degrees",
     length=300,
     command=gauge_change)
 the_gauge.pack()
 
 
-def poll_potentiometer():
-    while True:
-        socks = dict(the_zmq_poller.poll(10))
-        #print(len(socks))
-        if 0 == len(socks):
-            break
+def ipc_recv():
+    published_values = the_ipc_session.recv()
+    for topic, value in published_values.items():
+        if "potentiometer" == topic:
+            the_potentiometer.set(value)
 
-        if the_zmq_subscriber in socks:
-            topic, message = the_zmq_subscriber.recv_string().split()
-
-            if "potentiometer" == topic:
-                the_potentiometer.set(float(message))
-
-    the_window.after(100, poll_potentiometer)
+    the_window.after(25, ipc_recv)
 
 
-poll_potentiometer()
+ipc_recv()
 
 tk.mainloop()

@@ -1,3 +1,4 @@
 gevent>=1.2
 msgflo>=0.4
 PyMata>=2.18
+PyZMQ>=17.1

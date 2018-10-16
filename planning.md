@@ -40,6 +40,12 @@ Milestone FANCONTROL:
 
 ## TODO
 
+Stuff to buy
+
+* USB extenstion, 15-30 cm
+* M2.5 standoffs, 13.5mm. Can maybe use 12 or 15mm
+* 
+
 Milestone DISPLAY:
 
 - [ ] Test servocontrol for dial type display. Incl a simple hand. (M)
@@ -74,6 +80,7 @@ Windgust animation
 Mon 8
 Milestone B: All electronics assembled (M)
 
+- [ ] Test user button input
 - [ ] Optocoupler for fancontrol. Non-inverting
 - [ ] RPi powered and running
 - [ ] Arduino with daughterboard

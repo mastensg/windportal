@@ -45,19 +45,21 @@ class State():
     self.__dict__.update(attrs)
 
 
-def map_linear(x,in_low,in_high,out_low,out_high):
-  return 0.0
+def constrain(val, min_val, max_val):
+    return min(max_val, max(min_val, val))
+
 
 #
 def next_state(current : State, inputs : Inputs):
-  i = inputs
+  wind_min = 0.0
+  wind_max = 40.0
+  windspeed = constrain(inputs.windspeed, wind_min, wind_max)
 
-  gust = map_linear(random.random(), 0.0, 1.0, -2.0, 3.0)
-  fan_speed = map_linear(i.windspeed + gust, 0.0, 30.0, 0.0, 1.0)
+  fan_speed = (windspeed / wind_max)
 
   state = State(
     fan_speed = fan_speed,
-    connected_led = i.mqtt_connected, 
+    connected_led = inputs.mqtt_connected,
   )
 
   return state

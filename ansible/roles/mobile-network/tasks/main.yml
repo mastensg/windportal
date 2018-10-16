@@ -15,3 +15,4 @@
       command: "nmcli connection modify mobile connection.autoconnect yes connection.autoconnect-retries 1000 gsm.pin {{mobile_network_pin}} gsm.number {{mobile_network_number}}"
     - name: Set connection as up
       command: "nmcli connection up mobile"
+      ignore_errors: yes # will happen if GSM modem not plugged in

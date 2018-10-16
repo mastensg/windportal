@@ -35,6 +35,13 @@ Milestone 0: Ready to work
 - [x] Setup server. Linode,DNS,email,Mosquitto in Ansible (M) 5
 - [x] Server is deployed
 
+RPI ready
+
+- [x] RPI automatically sets up reverse SSH (J)
+- [x] Setup/test 3G modem on RPI (J)
+- [x] Device can fetch current wind data from server (J)
+- [x] Test Firmata at same time as ModemManager, ttyACMx. (J)
+
 Milestone FANCONTROL:
 
 - [x] Tested control of fan from software (via Firmata, analog/PWM) 
@@ -55,13 +62,10 @@ Milestone DISPLAY:
 - [x] Test servocontrol for dial type display. Incl a simple hand. (M)
 - [ ] ... pending decision ...
 
-RPI ready
+Electronics requirements
 
-- [x] RPI automatically sets up reverse SSH (J)
-- [x] Setup/test 3G modem on RPI (J)
-- [x] Device can fetch current wind data from server (J)
-- [x] Test Firmata at same time as ModemManager, ttyACMx. (J)
 - [ ] Test user button input
+- [ ] Test RPI USB serial
 
 Server datafetching
 
@@ -83,8 +87,8 @@ Mon 8
 Milestone B: All electronics assembled (M)
 
 - [ ] Make baseboard for mounting in box
-- [ ] USB to serial for dashboard
-- [ ] Optocoupler for fancontrol. Non-inverting
+- [ ] USB to serial in dashboard
+- [x] Optocoupler for fancontrol. Non-inverting
 - [ ] RPi powered and running
 - [ ] Arduino with daughterboard
 - [ ] LEDs in control panel

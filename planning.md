@@ -2,9 +2,10 @@
 Key questions
 
 - [x] OK with FOSS (Sjur)
-- [x] Fan control interface. Analog or modbus 
+- [x] Fan control interface. Analog or modbus
 - [ ] LCD display, dial indicator or 7-segment. ! may need more hardware
-- [ ] Decide ownership domain,server,SIM (dep: Sjur)
+- [ ] Get a custom domain
+- [ ] Ownership server,SIM (dep: Sjur)
 
 Risk moments
 
@@ -40,26 +41,27 @@ Milestone FANCONTROL:
 
 ## TODO
 
+Misc
+
+- Make block diagram of electronics
+
 Stuff to buy
 
-* USB extenstion, 15-30 cm
 * M2.5 standoffs, 13.5mm. Can maybe use 12 or 15mm
-* 
+
 
 Milestone DISPLAY:
 
-- [ ] Test servocontrol for dial type display. Incl a simple hand. (M)
+- [x] Test servocontrol for dial type display. Incl a simple hand. (M)
 - [ ] ... pending decision ...
-- [ ] Test if 7-segment module bright enough (M)
 
 RPI ready
 
 - [x] RPI automatically sets up reverse SSH (J)
-- [ ] Setup/test 3G modem on RPI (J)
-- [ ] Test/fix Firmata at same time as ModemManager, ttyACMx. (J)
-Hints about udev mechanisms. `ID_MM_CANDIDATE` and `ID_MM_PLATFORM_DRIVER_PROBE`
-https://askubuntu.com/questions/740584/enabling-serial-network-devices-with-modemmanager
-- [ ] Device can fetch current wind data from server (J)
+- [x] Setup/test 3G modem on RPI (J)
+- [x] Device can fetch current wind data from server (J)
+- [x] Test Firmata at same time as ModemManager, ttyACMx. (J)
+- [ ] Test user button input
 
 Server datafetching
 
@@ -80,7 +82,8 @@ Windgust animation
 Mon 8
 Milestone B: All electronics assembled (M)
 
-- [ ] Test user button input
+- [ ] Make baseboard for mounting in box
+- [ ] USB to serial for dashboard
 - [ ] Optocoupler for fancontrol. Non-inverting
 - [ ] RPi powered and running
 - [ ] Arduino with daughterboard

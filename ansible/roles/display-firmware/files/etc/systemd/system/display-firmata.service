@@ -1,0 +1,14 @@
+[Service]
+ExecStart=/opt/windmachine/venv/bin/python /opt/windmachine/firmware/firmata_proxy.py
+WorkingDirectory=/opt/windmachine/firmware
+Restart=always
+RestartSec=10
+User=display
+Group=display
+EnvironmentFile=/etc/windmachine/display.env
+
+[Unit]
+After=network-online.target
+
+[Install]
+WantedBy=multi-user.target

@@ -1,5 +1,5 @@
+
 import gevent
-import numpy
 from PyMata.pymata import PyMata
 
 import firmata_ipc

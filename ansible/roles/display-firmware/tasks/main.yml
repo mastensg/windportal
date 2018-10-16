@@ -12,7 +12,7 @@
     user:
       name: display
       state: present
-      groups: gpio
+      groups: gpio,dialout
   - name: firmware root dir
     file:
       path: /opt/windmachine/firmware
@@ -54,6 +54,16 @@
   - name: Start systemd service
     systemd:
       name: display-firmware
+      state: restarted # TODO, only restart when needed 
+      enabled: yes
+      daemon_reload: yes # TODO, only restart on need
+  - name: Copy service file
+    copy:
+      src: etc/systemd/system/display-firmata.service
+      dest: /etc/systemd/system/display-firmata.service
+  - name: Start systemd service
+    systemd:
+      name: display-firmata
       state: restarted # TODO, only restart when needed 
       enabled: yes
       daemon_reload: yes # TODO, only restart on need

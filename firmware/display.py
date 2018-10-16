@@ -1,4 +1,5 @@
 
+import firmata_ipc
 import gpio
 
 import gevent.monkey
@@ -38,6 +39,7 @@ class Inputs():
 class State():
   def __init__(self,
         fan_speed : float = 0.0,
+        gauge_degrees : int = 0,
         connected_led : bool = False):
 
     attrs = locals()
@@ -48,25 +50,28 @@ class State():
 def constrain(val, min_val, max_val):
     return min(max_val, max(min_val, val))
 
+def map_linear(x, in_min, in_max, out_min, out_max):
+  return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min
 
-#
+
 def next_state(current : State, inputs : Inputs):
   wind_min = 0.0
   wind_max = 40.0
   windspeed = constrain(inputs.windspeed, wind_min, wind_max)
 
+  # TODO: add gusts
   fan_speed = (windspeed / wind_max)
 
+  gauge = int(map_linear(windspeed, wind_min, wind_max, 0, 180))
+
   state = State(
+    gauge_degrees = gauge,
     fan_speed = fan_speed,
     connected_led = inputs.mqtt_connected,
   )
 
   return state
 
-
-def set_outputs(state : State):
-  print('TODO: realize outputs', state.__dict__)
 
 
 participant_definition = {
@@ -105,6 +110,8 @@ class Participant(msgflo.Participant):
     self.state = State()
     self.inputs = Inputs(time=0, windspeed=0.0)
 
+    self.ipc_session = firmata_ipc.Session(bind=False)
+
     gevent.Greenlet.spawn(self.loop)
 
   def process(self, inport, msg):
@@ -119,6 +126,15 @@ class Participant(msgflo.Participant):
   def is_connected(self):
     return getattr(self, '_engine', None) and self._engine.connected
 
+  def set_outputs(self, state : State):
+    outputs = {
+      'fan_duty': state.fan_speed,
+      'gauge_degrees': state.gauge_degrees,
+    }
+    print('TODO: realize outputs', outputs)
+    for k, v in outputs.items():
+      self.ipc_session.send(k, v)
+
   def get_inputs(self) -> Inputs:
     windspeed = 0.0
     try:
@@ -129,6 +145,9 @@ class Participant(msgflo.Participant):
     except ValueError as e:
       logging.warning("Error reading windspeed file, removing. " + str(e))
       os.remove(self.windspeed_file)
+
+    got = self.ipc_session.recv(timeout_ms=5)
+    print('g', got)
 
     inputs = Inputs(
         time=time.monotonic(),
@@ -149,7 +168,7 @@ class Participant(msgflo.Participant):
 
     inputs = self.get_inputs()
     next = next_state(copy.deepcopy(self.state), copy.deepcopy(inputs))
-    set_outputs(next)
+    self.set_outputs(next)
 
     state_changed = next != self.state
     if state_changed:

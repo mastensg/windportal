@@ -1,4 +1,16 @@
 
+## SSH config
+To jump via the central cloud server.
+
+    Host windhub
+	    HostName hub.wind.mastensg.net
+	    User jonnor
+    
+    Host wind0
+     	User jonnor
+    #	HostName  dlock-dev.local
+	    ProxyCommand=ssh windhub nc localhost 2000
+
 ## Initalize device from base image
 
 On first run you need to use default `pi` user. This should only be done on a private Ethernet connection.

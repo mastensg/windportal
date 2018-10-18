@@ -24,6 +24,9 @@ https://www.prisjakt.no/product.php?p=837682
 HA-101ZIEB0HH1-A            10"     2000 kr
 https://no.mouser.com/ProductDetail/Microtips-Technology/HA-101ZIEB0HH1-A?qs=%2fha2pyFaduhhRkIGrZte%252bDuKOBZaMr2f7AwmsYjxzTDlbD9UeeSf9QUXMsmhGxqW
 
+Power supply, 12 V, 5 A
+https://www.kjell.com/no/produkter/elektro-og-verktoy/stromforsyning/stromforsyning/ac-dc/fast-utgangsspenning/svitsjet-stromforsyning-12-v-(dc)-60-w-p44714
+
 skjermkabel
 -----------
 

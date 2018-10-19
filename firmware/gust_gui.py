@@ -25,9 +25,11 @@ the_canvas.pack()
 
 the_fig_photo = None
 
-the_period = 50
-the_noise = np.random.normal(0.0, 0.1, the_period)
+the_period = 200
+the_noise = np.random.normal(0.0, 1.0, the_period)
 the_noise_series = pd.Series(the_noise)
+
+##############################################################################
 
 
 def wind_speed_change(s_str):
@@ -61,7 +63,7 @@ def wind_speed_change(s_str):
 the_wind_speed = tk.Scale(
     the_window,
     from_=0.0,
-    to=100.0,
+    to=40.0,
     resolution=0.1,
     orient=tk.HORIZONTAL,
     label="wind speed",
@@ -69,31 +71,6 @@ the_wind_speed = tk.Scale(
     command=wind_speed_change)
 the_wind_speed.pack()
 the_wind_speed.set(20.0)
-
-
-def gauge_change(s_str):
-    s = int(float(s_str))
-    the_ipc_session.send("gauge_degrees", s)
-
-
-the_gauge = tk.Scale(
-    the_window,
-    from_=0.0,
-    to=180.0,
-    resolution=0.1,
-    orient=tk.HORIZONTAL,
-    label="gauge degrees",
-    length=300,
-    command=gauge_change)
-the_gauge.pack()
-
-
-def potentiometer_change(s_str):
-    s = int(180.0 * float(s_str))
-    #global the_gauge
-    #the_gauge.set(s)
-    #the_ipc_session.send("gauge_degrees", s)
-
 
 the_potentiometer = tk.Scale(
     the_window,
@@ -103,8 +80,94 @@ the_potentiometer = tk.Scale(
     orient=tk.HORIZONTAL,
     label="potentiometer",
     length=300,
-    command=potentiometer_change)
+    command=None)
 the_potentiometer.pack()
+the_potentiometer.set(0.5)
+
+the_perturbation_period = tk.Scale(
+    the_window,
+    from_=10,
+    to=10000,
+    resolution=1,
+    orient=tk.HORIZONTAL,
+    label="perturbation period (ms)",
+    length=300,
+    command=None)
+the_perturbation_period.pack()
+the_perturbation_period.set(1000)
+
+the_perturbation_amplitude = tk.Scale(
+    the_window,
+    from_=0.0,
+    to=1.0,
+    resolution=0.001,
+    orient=tk.HORIZONTAL,
+    label="perturbation amplitude",
+    length=300,
+    command=None)
+the_perturbation_amplitude.pack()
+the_perturbation_amplitude.set(0.1)
+
+the_perturbation = tk.Scale(
+    the_window,
+    from_=-1.0,
+    to=1.0,
+    resolution=0.01,
+    orient=tk.HORIZONTAL,
+    label="perturbation",
+    length=300,
+    command=None)
+the_perturbation.pack()
+
+the_fan_duty = tk.Scale(
+    the_window,
+    from_=0.0,
+    to=1.0,
+    resolution=0.01,
+    orient=tk.HORIZONTAL,
+    label="fan duty",
+    length=300,
+    command=None)
+the_fan_duty.pack()
+
+tk.Label(the_window, text="\nsimulation\n").pack()
+
+the_fan_flow_response_up = tk.Scale(
+    the_window,
+    from_=0.00,
+    to=0.1,
+    resolution=0.001,
+    orient=tk.HORIZONTAL,
+    label="fan flow response up",
+    length=300,
+    command=None)
+the_fan_flow_response_up.pack()
+the_fan_flow_response_up.set(0.002)
+
+the_fan_flow_response_down = tk.Scale(
+    the_window,
+    from_=0.00,
+    to=0.1,
+    resolution=0.001,
+    orient=tk.HORIZONTAL,
+    label="fan flow response down",
+    length=300,
+    command=None)
+the_fan_flow_response_down.pack()
+the_fan_flow_response_down.set(0.001)
+
+the_fan_flow = tk.Scale(
+    the_window,
+    from_=0.0,
+    to=1.0,
+    resolution=0.001,
+    orient=tk.HORIZONTAL,
+    label="fan flow",
+    length=300,
+    command=None)
+the_fan_flow.pack()
+
+##############################################################################
 
 
 def ipc_recv():
@@ -119,39 +182,63 @@ def ipc_recv():
 ipc_recv()
 
 
-def fan_duty_change(s_str):
-    s = float(s_str)
-    the_ipc_session.send("fan_duty", s)
+def ipc_send():
+    the_ipc_session.send("fan_duty", float(the_fan_duty.get()))
+    the_window.after(25, ipc_recv)
 
 
-the_fan_duty = tk.Scale(
-    the_window,
-    from_=0.0,
-    to=1.0,
-    resolution=0.01,
-    orient=tk.HORIZONTAL,
-    label="fan duty",
-    length=300,
-    command=fan_duty_change)
-the_fan_duty.pack()
+ipc_send()
 
 the_noise_phase = 0
 
 
-def perturb_fan_duty():
+def update_perturbation():
+    perturbation_amplitude = the_perturbation_amplitude.get()
+
     global the_noise_phase
 
     n = the_noise[the_noise_phase]
-    print(n)
+    p = perturbation_amplitude * n
 
-    #the_fan_duty.set(n)
-    the_gauge.set(n)
+    the_perturbation.set(p)
 
     the_noise_phase = the_noise_phase + 1 if the_noise_phase < the_period - 1 else 0
 
-    the_window.after(500, perturb_fan_duty)
+    the_window.after(the_perturbation_period.get(), update_perturbation)
 
 
-perturb_fan_duty()
+update_perturbation()
+
+
+def update_fan_duty():
+    wind_speed = the_wind_speed.get()
+    potentiometer = the_potentiometer.get()
+    perturbation = the_perturbation.get()
+
+    duty = (1 / 40) * wind_speed * potentiometer + perturbation
+
+    the_fan_duty.set(duty)
+
+    the_window.after(50, update_fan_duty)
+
+
+update_fan_duty()
+
+
+def update_fan_flow():
+    d = the_fan_duty.get()
+    f = the_fan_flow.get()
+
+    if f < d:
+        f += the_fan_flow_response_up.get()
+    elif d < f:
+        f -= the_fan_flow_response_down.get()
+
+    the_fan_flow.set(f)
+
+    the_window.after(50, update_fan_flow)
+
+
+update_fan_flow()
 
 tk.mainloop()

@@ -18,14 +18,11 @@ https://no.mouser.com/ProductDetail/OSEPP-Electronics/LS-8101F?qs=sGAEpiMZZMu8c2
 skjerm
 ------
 
-Eizo DuraVision FDX1201     12"     5000 kr
-https://www.prisjakt.no/product.php?p=837682
-
 HA-101ZIEB0HH1-A            10"     2000 kr
 https://no.mouser.com/ProductDetail/Microtips-Technology/HA-101ZIEB0HH1-A?qs=%2fha2pyFaduhhRkIGrZte%252bDuKOBZaMr2f7AwmsYjxzTDlbD9UeeSf9QUXMsmhGxqW
 
-Power supply, 12 V, 5 A
-https://www.kjell.com/no/produkter/elektro-og-verktoy/stromforsyning/stromforsyning/ac-dc/fast-utgangsspenning/svitsjet-stromforsyning-12-v-(dc)-60-w-p44714
+Power supply, 12 V, 1 A             140 kr
+https://www.kjell.com/no/produkter/elektro-og-verktoy/stromforsyning/stromforsyning/ac-dc/fast-utgangsspenning/switchet-stromadapter-12-v-(dc)-12-w-p44382
 
 skjermkabel
 -----------

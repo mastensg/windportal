@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import sys
 import tkinter as tk
 import time
@@ -11,9 +13,9 @@ from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg,
 
 import pandas as pd
 
-import firmata_ipc
+import wp_ipc
 
-the_ipc_session = firmata_ipc.Session()
+the_ipc_session = wp_ipc.Session()
 
 the_window = tk.Tk()
 the_window.title("A figure in a canvas")
@@ -184,7 +186,7 @@ ipc_recv()
 
 def ipc_send():
     the_ipc_session.send("fan_duty", float(the_fan_duty.get()))
-    the_window.after(25, ipc_recv)
+    the_window.after(1000, ipc_send)
 
 
 ipc_send()

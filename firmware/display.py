@@ -1,5 +1,6 @@
+#!/usr/bin/env python3
 
-import firmata_ipc
+import wp_ipc
 import gpio
 
 import gevent.monkey
@@ -110,7 +111,7 @@ class Participant(msgflo.Participant):
     self.state = State()
     self.inputs = Inputs(time=0, windspeed=0.0)
 
-    self.ipc_session = firmata_ipc.Session(bind=False)
+    self.ipc_session = wp_ipc.Session()
 
     gevent.Greenlet.spawn(self.loop)
 

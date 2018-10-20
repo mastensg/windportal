@@ -1,8 +1,9 @@
+#!/usr/bin/env python3
 
 import gevent
 from PyMata.pymata import PyMata
 
-import firmata_ipc
+import wp_ipc
 
 LED_PIN = 13
 FAN_PIN = 3
@@ -11,7 +12,7 @@ POTENTIOMETER_ANALOG_PIN = 0
 
 
 def main():
-    the_ipc_session = firmata_ipc.Session(bind=True)
+    the_ipc_session = wp_ipc.Session()
 
     port = '/dev/ttyACM0'
 
@@ -34,12 +35,11 @@ def main():
                 board.digital_write(LED_PIN, value)
 
         pot1024 = board.analog_read(POTENTIOMETER_ANALOG_PIN)
-        #pot1024=999
         pot = (1.0 / 1024.0) * pot1024
+
         the_ipc_session.send("potentiometer", pot)
 
-        print(".", end="", flush=True)
-        gevent.sleep(0.025)
+        gevent.sleep(0.100)
 
 
 if __name__ == '__main__':

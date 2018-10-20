@@ -1,30 +1,26 @@
+#!/usr/bin/env python3
+
 import json
 
 import zmq
 
-PUB_URL = "ipc:///tmp/firmata_pub"
-SUB_URL = "ipc:///tmp/firmata_sub"
+PUB_URL = "ipc:///tmp/wp_pub"
+SUB_URL = "ipc:///tmp/wp_sub"
 
 
 class Session:
-    def __init__(self, bind=False):
+    def __init__(self):
         self.context = zmq.Context()
 
         self.sub = self.context.socket(zmq.SUB)
-        if bind:
-            self.sub.bind(SUB_URL)
-        else:
-            self.sub.connect(PUB_URL)
+        self.sub.connect(SUB_URL)
         self.sub.setsockopt(zmq.SUBSCRIBE, b"")
 
         self.poller = zmq.Poller()
         self.poller.register(self.sub, zmq.POLLIN)
 
         self.pub = self.context.socket(zmq.PUB)
-        if bind:
-            self.pub.bind(PUB_URL)
-        else:
-            self.pub.connect(SUB_URL)
+        self.pub.connect(PUB_URL)
 
     def recv(self, timeout_ms=10):
         values = {}
@@ -55,5 +51,5 @@ def main():
             print(r)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

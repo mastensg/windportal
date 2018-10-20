@@ -1,0 +1,36 @@
+blockdiag {
+    default_fontsize = 16;
+    node_width = 240;
+    node_height = 60;
+
+    group equinor_yr {
+        label = "equinor / yr";
+
+        weather_service;
+    }
+
+    group hub {
+        label = "hub";
+
+        ssh-call-home-server;
+
+        mosquitto;
+        weather_scraper;
+    }
+
+    group display {
+        label = "display";
+
+        ssh-call-home-device;
+
+        display -> wp_firmata;
+        display -> wp_visuals;
+        wp_ipc;
+    }
+
+    ssh-call-home-device -> ssh-call-home-server;
+
+    weather_service -> weather_scraper;
+    weather_scraper -> mosquitto;
+    mosquitto -> display;
+}

@@ -20,6 +20,8 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
+#include <zmq.h>
+
 #include "gl.h"
 #include "platform.h"
 #include "reload_main.h"
@@ -90,7 +92,11 @@ void pixels_of_surface(uint8_t *pixels, cairo_surface_t *surface, int width,
 //////////////////////////////////////////////////////////////////////////////
 
 struct AppState {
+  float wind_speed;
   cairo_font_face_t *cairo_font_face;
+  void *zmq_ctx;
+  void *zmq_pub;
+  void *zmq_sub;
 };
 
 struct Session {
@@ -113,21 +119,41 @@ void reload_main(int argc, char *argv[], void **data, const int *changed) {
 
     AppState *as = &the_session->as;
 
-    FT_Library ft_library;
+    as->wind_speed = 0.0f;
+
+    // font
     {
-      FT_Error ft_status = FT_Init_FreeType(&ft_library);
-      assert(0 == ft_status);
+      FT_Library ft_library;
+      {
+        FT_Error ft_status = FT_Init_FreeType(&ft_library);
+        assert(0 == ft_status);
+      }
+
+      FT_Face ft_face;
+      {
+        const char *font_path =
+            "/home/mastensg/src/voxel/AccanthisADFStdNo3-Regular.otf";
+        FT_Error ft_status = FT_New_Face(ft_library, font_path, 0, &ft_face);
+        assert(0 == ft_status);
+      }
+
+      as->cairo_font_face = cairo_ft_font_face_create_for_ft_face(ft_face, 0);
     }
 
-    FT_Face ft_face;
+    // ipc
     {
-      const char *font_path =
-          "/home/mastensg/src/voxel/AccanthisADFStdNo3-Regular.otf";
-      FT_Error ft_status = FT_New_Face(ft_library, font_path, 0, &ft_face);
-      assert(0 == ft_status);
-    }
+      const char *ipc_pub_url = "ipc:///tmp/wp_pub";
+      const char *ipc_sub_url = "ipc:///tmp/wp_sub";
 
-    as->cairo_font_face = cairo_ft_font_face_create_for_ft_face(ft_face, 0);
+      as->zmq_ctx = zmq_ctx_new();
+
+      as->zmq_pub = zmq_socket(as->zmq_ctx, ZMQ_PUB);
+      zmq_connect(as->zmq_pub, ipc_pub_url);
+
+      as->zmq_sub = zmq_socket(as->zmq_ctx, ZMQ_SUB);
+      zmq_connect(as->zmq_sub, ipc_sub_url);
+      zmq_setsockopt(as->zmq_sub, ZMQ_SUBSCRIBE, "", 0);
+    }
   }
 
   auto &S = *the_session;
@@ -176,6 +202,24 @@ void reload_main(int argc, char *argv[], void **data, const int *changed) {
     }
     // double platform_time = platform::time(p);
 
+    for (;;) {
+      char buf[1024];
+
+      int numbytes = zmq_recv(as->zmq_sub, buf, sizeof(buf), ZMQ_DONTWAIT);
+      if (-1 == numbytes) {
+        break;
+      }
+
+      {
+        const char *topic = "potentiometer ";
+        if (0 == strncmp(topic, buf, strlen(topic))) {
+          float value;
+          sscanf(buf + strlen(topic), "%f", &value);
+          as->wind_speed = 40.0f * value;
+        }
+      }
+    }
+
     if (true) {
       cairo_surface_t *surface = cairo_image_surface_create(
           CAIRO_FORMAT_ARGB32, temp_width, temp_height);
@@ -192,13 +236,13 @@ void reload_main(int argc, char *argv[], void **data, const int *changed) {
       cairo_set_font_face(cr, as->cairo_font_face);
 
       const double left = 400.0;
-      const double fs = 200.0;
+      const double fs = 300.0;
       const double margin = (temp_height - 3.0 * fs) / 4.5;
       cairo_set_font_size(cr, fs);
 
       {
         char temp[100];
-        std::sprintf(temp, "%3.2f m/s", 35.4);
+        std::sprintf(temp, "%3.1f m/s", as->wind_speed);
 
         cairo_move_to(cr, left, 1.0 * (margin + fs));
         cairo_show_text(cr, temp);
@@ -232,7 +276,7 @@ void reload_main(int argc, char *argv[], void **data, const int *changed) {
       break;
     }
 
-    std::this_thread::sleep_for(std::chrono::milliseconds(500));
+    std::this_thread::sleep_for(std::chrono::milliseconds(100));
   }
 
   std::fprintf(stderr, "\n----------------------------------------\n\n");

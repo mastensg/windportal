@@ -20,6 +20,7 @@ LT_INIT([disable-static])
 
 PKG_CHECK_MODULES([CAIRO], [cairo])
 PKG_CHECK_MODULES([FREETYPE2], [freetype2])
+PKG_CHECK_MODULES([ZMQ], [libzmq])
 
 # PLATFORM  ############################
 

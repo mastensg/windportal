@@ -29,7 +29,12 @@ libstbimage_la_SOURCES = \
 
 # visuals  #############################################################
 
-libvisuals_la_CXXFLAGS = $(AM_CXXFLAGS) $(PLATFORM_CFLAGS) $(CAIRO_CFLAGS) $(FREETYPE2_CFLAGS)
+libvisuals_la_CXXFLAGS = \
+			 $(AM_CXXFLAGS) \
+			 $(PLATFORM_CFLAGS) \
+			 $(CAIRO_CFLAGS) \
+			 $(FREETYPE2_CFLAGS) \
+			 $(ZMQ_CFLAGS)
 libvisuals_la_SOURCES = \
 		     src/platform.h \
 		     src/visuals.cc \
@@ -39,6 +44,7 @@ wp_visuals_CXXFLAGS = $(libvisuals_la_CXXFLAGS)
 wp_visuals_LDADD = \
 	     $(CAIRO_LIBS) \
 	     $(FREETYPE2_LIBS) \
+	     $(ZMQ_LIBS) \
 	     libplatform.la \
 	     libvisuals.la
 wp_visuals_SOURCES = \
@@ -51,6 +57,7 @@ wp_visuals_reload_LDADD = \
 		    -lpthread \
 		    $(CAIRO_LIBS) \
 		    $(FREETYPE2_LIBS) \
+		    $(ZMQ_LIBS) \
 		    libplatform.la
 wp_visuals_reload_SOURCES = \
 		src/reload.cc \

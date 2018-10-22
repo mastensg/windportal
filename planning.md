@@ -13,6 +13,10 @@ Risk moments
 - [ ] Data communication device,server,datasource
 - [ ] In-field failures
 
+Bugs
+
+- [ ] If Arduino is plugged, wp_firmata keeps running using 100% CPU.
+
 ## Deadlines
 
 

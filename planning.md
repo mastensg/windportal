@@ -116,6 +116,7 @@ Milestone C: I/O complete, from RPi (M)
 Thurs 25.
 Milestone D: System complete
 
+- [ ] Hide startup rainbow, linux messages from screen
 - [ ] Monitoring exists
 - [ ] Windgust animation works
 - [ ] Tested device poweroffs

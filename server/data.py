@@ -1,15 +1,31 @@
 # coding=utf-8
 
+import gevent.monkey
+gevent.monkey.patch_all() # make sure all syncronous calls in stdlib yields to gevent
+
+import gevent.pywsgi
+import flask
+import paho.mqtt.client as mqtt
+import werkzeug.security as wsecurity
+
 import urllib.request
 import urllib.parse
 import os
 import json
 import datetime
 import sys
-import csv
+import time
 import xml.etree.ElementTree
 import math
 import numbers
+from urllib.parse import urlparse
+
+import logging
+logging.basicConfig()
+log_level = os.environ.get('LOGLEVEL', 'info')
+log = logging.getLogger('server')
+log.setLevel(getattr(logging, log_level.upper()))
+
 
 
 import lxml.html 
@@ -33,9 +49,120 @@ def windspeed_ukenergy():
     assert_valid_windspeed(windspeed)
     return windspeed
 
+def create_mqtt_client(broker_url):
+    broker_info = urlparse(broker_url)
+
+    client = mqtt.Client()
+    if broker_info.username:
+        client.username_pw_set(broker_info.username, broker_info.password)
+
+    client.reconnect_delay_set(min_delay=0.1, max_delay=2*60)
+
+    host = broker_info.hostname
+    default_port = 1883
+    if broker_info.scheme == 'mqtts':
+        default_port = 8883
+        client.tls_set()
+    port = broker_info.port or default_port
+
+    # XXX loop() does not handle reconnects, have to use loop_start() or loop_forever() 
+    client.loop_start()
+
+    return client, host, port
+
+
+
+def seen_since(messages, time : float):
+    devices = {}
+    for m in messages:
+        d = m['payload']['role']
+        t = m['time_received']
+        if t > time:
+            devices[d] = t
+    return devices
+
+def setup_app(broker_url, check_interval=30*60):
+    wind_speed = 0.1111
+    heartbeat_messages = []
+    running = True
+
+    def handle_heartbeat():
+        # Heartbeat messages as per msgflo participant discovery protocol
+        d = message.payload.decode('utf8')
+        m = json.loads(d)
+
+        device = m['payload']['role']
+        t = time.time()
+        log.debug('saw device {} at {}'.format(device, t))
+        m['time_received'] = t
+
+        # Persist so we can query for device status
+        if len(heartbeat_messages) == 100:
+            # Remove the oldest to make space
+            _oldest = heartbeat_messages.pop(0)
+        heartbeat_messages.append(m)
+
+    def mqtt_connected(client, u, f, rc):
+        log.info('MQTT connected')
+
+    def mqtt_disconnected(client, u, rc):
+        log.info('MQTT disconnected: {}'.format(rc))
+        # client automatically handles reconnect
+
+    def mqtt_message_received(client, u, message):
+        try:
+            if message.topic == 'fbp':
+                handle_heartbeat(message.payload)
+            else:
+                raise ValueError("Unknown MQTT topic: {}".format(message.topic))
+            mqtt_handle_message(client, u, message)
+        except Exception as e:
+            log.exception('Failed to handle MQTT message %: %s'.format(message.topic, message.payload))
+
+    mqtt_client, host, port = create_mqtt_client(broker_url)
+    mqtt_client.on_connect = mqtt_connected
+    mqtt_client.on_disconnect = mqtt_disconnected
+    mqtt_client.on_message = mqtt_message_received
+
+    mqtt_client.connect(host, port)
+
+    def check_heartbeats():
+        previous_check = time.time() - check_interval
+        devices = seen_since(heartbeat_messages, previous_check)
+        if not 'display0' in devices:
+            log.info("Missing heartbeat for 'display0'. Seen: {}".format(devices))
+
+    def fetch_and_publish():
+        log.info('Fetching new wind data')
+        nonlocal wind_speed
+        wind_speed = windspeed_ukenergy()
+        # FIXME: set persistent flag
+        mqtt_client.publish('display/display0/windspeed', wind_speed)
+        log.info('New windspeed is {}'.format(wind_speed))
+
+    def fetcher():
+        while running:
+            try:
+                fetch_and_publish()
+                check_heartbeats()
+            except Exception as e:
+                log.exception('Failed to fetch data: {}'.format(str(e)))
+            gevent.sleep(check_interval)
+
+    fetch_and_publish() 
+    gevent.spawn(fetcher)
+
+    def shutdown():
+        running = False
+        mqtt_client.disconnect()
+   
+    return shutdown
+
 def main():
-    wind_speed = windspeed_ukenergy()
-    print('w', wind_speed)
+    broker_url = os.environ.get('BROKER_URL', 'mqtt://localhost')
+    app = setup_app(broker_url)
+    log.info('Fetcher running')
+
 
 if __name__ == '__main__':
     main()

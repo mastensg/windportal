@@ -92,6 +92,7 @@ Milestone B: All electronics assembled (M)
 
 - [ ] Make baseboard for mounting in box
 - [ ] USB to serial in dashboard
+- [ ] RPi as wifi access point
 - [x] Optocoupler for fancontrol. Non-inverting
 - [ ] RPi powered and running
 - [ ] Arduino with daughterboard

@@ -190,6 +190,7 @@ def setup_gui():
 
     inputs = {
         'perturbation_period': the_perturbation_period,
+        'perturbation_amplitude': the_perturbation_amplitude,
         'wind_speed': the_wind_speed,
         'scale': the_potentiometer,
     }

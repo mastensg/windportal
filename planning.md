@@ -65,12 +65,8 @@ Documentation
 Windgust animation
 
 - [x] First version. Should depend on (average) windspeed
-- [ ] Move animation to dedicated program
-- [ ] systemd/Ansible for services 
-
-Stuff to buy
-
-* M2.5 standoffs, 13.5mm. Can maybe use 12 or 15mm.
+- [ ] Move animation to dedicated program (J)
+- [ ] systemd/Ansible for services (J)
 
 Display:
 
@@ -82,7 +78,7 @@ Display:
 Electronics requirements
 
 - [ ] Test user button input
-- [ ] Test RPI USB serial terminal
+- [x] Test RPI USB serial terminal
 
 Control panel
 

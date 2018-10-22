@@ -15,6 +15,12 @@ Styrke  34kg ved 7,4V / 38kg ved 8,4V
 LS-8101F                    13 kg cm
 https://no.mouser.com/ProductDetail/OSEPP-Electronics/LS-8101F?qs=sGAEpiMZZMu8c2wsui%252biYmlkd0O7x2MTCdeNraiOdu8%3d
 
+control panel
+-------------
+
+Miniatyrbryter 2-polet, til-fra-til     45 kr
+https://www.kjell.com/no/produkter/elektro-og-verktoy/elektronikk/electromechanics/strombrytere/vippebrytere/miniatyrbryter-2-polet-til-fra-til-p36022
+
 skjerm
 ------
 

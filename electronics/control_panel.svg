@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="100mm"
+   height="160mm"
+   viewBox="0 0 100 160"
+   version="1.1"
+   id="svg8"
+   inkscape:version="0.92.1 r15371"
+   sodipodi:docname="control_panel.svg">
+  <defs
+     id="defs2" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="3.959798"
+     inkscape:cx="158.93874"
+     inkscape:cy="188.45236"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1920"
+     inkscape:window-height="1200"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="0" />
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-137)">
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       x="28.348211"
+       y="170.12944"
+       id="text3750"><tspan
+         sodipodi:role="line"
+         id="tspan3748"
+         x="28.348211"
+         y="170.12944"
+         style="font-size:5.64444447px;stroke-width:0.26458332">Raspberry Pi power</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       x="28.858086"
+       y="161.54137"
+       id="text3750-9"><tspan
+         sodipodi:role="line"
+         id="tspan3748-1"
+         x="28.858086"
+         y="161.54137"
+         style="font-size:5.64444447px;stroke-width:0.26458332">Arduino power</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       x="28.530111"
+       y="196.39111"
+       id="text3750-2"><tspan
+         sodipodi:role="line"
+         x="28.530111"
+         y="196.39111"
+         style="font-size:5.64444447px;stroke-width:0.26458332"
+         id="tspan4875">Arduino attached</tspan></text>
+    <circle
+       r="1.5"
+       id="path31-62"
+       cx="21.26116"
+       cy="212.5126"
+       style="fill:#008000;stroke-width:0.04615385" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       x="28.858084"
+       y="213.61687"
+       id="text3750-0"><tspan
+         sodipodi:role="line"
+         x="28.858084"
+         y="213.61687"
+         style="font-size:5.64444447px;stroke-width:0.26458332"
+         id="tspan4879">All services running</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       x="28.348211"
+       y="179.26459"
+       id="text3750-06"><tspan
+         sodipodi:role="line"
+         id="tspan3748-2"
+         x="28.348211"
+         y="179.26459"
+         style="font-size:5.64444447px;stroke-width:0.26458332">Modem attached</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       x="28.348211"
+       y="187.85265"
+       id="text3750-6"><tspan
+         sodipodi:role="line"
+         id="tspan3748-18"
+         x="28.348211"
+         y="187.85265"
+         style="font-size:5.64444447px;stroke-width:0.26458332">Modem link up</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       x="28.348211"
+       y="204.65533"
+       id="text3750-2-7"><tspan
+         sodipodi:role="line"
+         id="tspan3748-7-9"
+         x="28.348211"
+         y="204.65533"
+         style="font-size:5.64444447px;stroke-width:0.26458332">Hub connected</tspan></text>
+    <circle
+       r="1.5"
+       id="path31-62-2"
+       cx="21.26116"
+       cy="203.26192"
+       style="fill:#008000;stroke-width:0.04615385" />
+    <circle
+       r="1.5"
+       id="path31-62-0"
+       cx="21.26116"
+       cy="193.24554"
+       style="fill:#008000;stroke-width:0.04615385" />
+    <circle
+       r="1.5"
+       id="path31-62-23"
+       cx="21.26116"
+       cy="184.17412"
+       style="fill:#008000;stroke-width:0.04615385" />
+    <circle
+       r="1.5"
+       id="path31-62-7"
+       cx="21.26116"
+       cy="175.29167"
+       style="fill:#008000;stroke-width:0.04615385" />
+    <circle
+       r="1.5"
+       id="path31-62-5"
+       cx="21.26116"
+       cy="167.54317"
+       style="fill:#008000;stroke-width:0.04615385" />
+    <circle
+       r="1.5"
+       id="path31-62-9"
+       cx="21.26116"
+       cy="159.0387"
+       style="fill:#008000;stroke-width:0.04615385" />
+    <circle
+       r="1.5"
+       id="path31-62-22"
+       cx="21.26116"
+       cy="150.9122"
+       style="fill:#008000;stroke-width:0.04615385" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       x="28.379318"
+       y="152.84737"
+       id="text3750-9-8"><tspan
+         sodipodi:role="line"
+         id="tspan3748-1-9"
+         x="28.379318"
+         y="152.84737"
+         style="font-size:5.64444447px;stroke-width:0.26458332">Fan connected</tspan></text>
+    <g
+       id="g4834"
+       transform="translate(4.1212799,4.7247024)">
+      <rect
+         y="227.4295"
+         x="16.772694"
+         height="12"
+         width="7"
+         id="rect4798"
+         style="fill:#999999;stroke:none;stroke-width:2.01803732;stroke-miterlimit:4;stroke-dasharray:4.03607465, 2.01803733;stroke-dashoffset:0;stroke-opacity:1" />
+      <circle
+         r="11.622767"
+         cy="235.9295"
+         cx="20.319941"
+         id="path3974"
+         style="fill:none;stroke:#050505;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:2, 1;stroke-dashoffset:0;stroke-opacity:1" />
+      <circle
+         r="3.5"
+         cy="235.9295"
+         cx="20.319941"
+         id="path4781"
+         style="fill:#008000;stroke:none;stroke-width:1.32283473;stroke-miterlimit:4;stroke-dasharray:1.3228347, 2.64566941;stroke-dashoffset:0;stroke-opacity:1" />
+      <circle
+         r="1"
+         cy="228.4295"
+         cx="20.319941"
+         id="path4781-7"
+         style="fill:#008000;stroke:none;stroke-width:0.37795278;stroke-miterlimit:4;stroke-dasharray:0.37795277, 0.75590555;stroke-dashoffset:0;stroke-opacity:1" />
+    </g>
+    <g
+       id="g4828"
+       transform="translate(21.319197,-13.195494)">
+      <rect
+         y="245.5997"
+         x="50.692337"
+         height="12"
+         width="7"
+         id="rect4798-3"
+         style="fill:#999999;stroke:none;stroke-width:2.01803732;stroke-miterlimit:4;stroke-dasharray:4.03607469, 2.01803735;stroke-dashoffset:0;stroke-opacity:1" />
+      <circle
+         r="11.622767"
+         cy="254.0997"
+         cx="54.239582"
+         id="path3974-6"
+         style="fill:none;stroke:#050505;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:2.00000002, 1.00000001;stroke-dashoffset:0;stroke-opacity:1" />
+      <circle
+         r="3.5"
+         cy="254.0997"
+         cx="54.239582"
+         id="path4781-1"
+         style="fill:#008000;stroke:none;stroke-width:1.32283473;stroke-miterlimit:4;stroke-dasharray:1.32283471, 2.64566944;stroke-dashoffset:0;stroke-opacity:1" />
+      <circle
+         r="1"
+         cy="246.5997"
+         cx="54.239582"
+         id="path4781-7-2"
+         style="fill:#008000;stroke:none;stroke-width:0.37795278;stroke-miterlimit:4;stroke-dasharray:0.37795278, 0.75590556;stroke-dashoffset:0;stroke-opacity:1" />
+    </g>
+    <circle
+       cy="241.15421"
+       cx="49.5"
+       id="path4781-9"
+       style="fill:#008000;stroke:none;stroke-width:1.13385832;stroke-miterlimit:4;stroke-dasharray:1.13385832, 2.26771666;stroke-dashoffset:0;stroke-opacity:1"
+       r="3" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:1.57657135px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.03941428"
+       x="21.969673"
+       y="246.29909"
+       id="text4885"><tspan
+         sodipodi:role="line"
+         id="tspan4883"
+         x="21.969673"
+         y="246.29909"
+         style="stroke-width:0.03941428">7mm</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:1.57657135px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.03941428"
+       x="73.267426"
+       y="246.45937"
+       id="text4885-3"><tspan
+         sodipodi:role="line"
+         id="tspan4883-1"
+         x="73.267426"
+         y="246.45937"
+         style="stroke-width:0.03941428">7mm</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:1.57657135px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.03941428"
+       x="47.60955"
+       y="247.26117"
+       id="text4885-9"><tspan
+         sodipodi:role="line"
+         id="tspan4883-4"
+         x="47.60955"
+         y="247.26117"
+         style="stroke-width:0.03941428">6mm</tspan></text>
+  </g>
+</svg>

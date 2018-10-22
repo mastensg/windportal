@@ -3,8 +3,8 @@ Key questions
 
 - [x] OK with FOSS (Sjur)
 - [x] Fan control interface. Analog or modbus
-- [ ] LCD display, dial indicator or 7-segment. ! may need more hardware
-- [ ] Get a custom domain
+- [x] Decide display. LCD, dial indicator or 7-segment.
+- [ ] Get a custom domain (dep: Sjur)
 - [ ] Ownership server,SIM (dep: Sjur)
 
 Risk moments
@@ -52,28 +52,72 @@ Milestone FANCONTROL:
 
 ## TODO
 
-Misc
+### System check, Oct 23
 
-- Make block diagram of electronics
+Communicate
+
+- [ ] Screen needs waterproofing
+
+Documentation
+
+- [ ] Make block diagram of electronics
+
+Windgust animation
+
+- [x] First version. Should depend on (average) windspeed
+- [ ] Move animation to dedicated program
+- [ ] systemd/Ansible for services 
 
 Stuff to buy
 
-* M2.5 standoffs, 13.5mm. Can maybe use 12 or 15mm
+* M2.5 standoffs, 13.5mm. Can maybe use 12 or 15mm.
 
-
-Milestone DISPLAY:
+Display:
 
 - [x] Test servocontrol for dial type display. Incl a simple hand. (M)
-- [ ] ... pending decision ...
+- [x] Screen tested OK
+- [x] Program to display windspeed
+- [ ] Using right font, colors. Centered
 
 Electronics requirements
 
 - [ ] Test user button input
-- [ ] Test RPI USB serial
+- [ ] Test RPI USB serial terminal
+
+Control panel
+
+- [ ] Status LEDs
+- [ ] Potmeter animation scale
+- [ ] Potmeter manual fan control
+- [ ] Software/manual switch
+
+Milestone B: All electronics assembled (M)
+
+- [ ] Baseboard for mounting in box
+- [ ] USB to serial in dashboard
+- [ ] RPi as wifi access point
+- [x] Optocoupler for fancontrol. Non-inverting
+- [ ] RPi powered and running
+- [ ] Arduino with daughterboard
+- [ ] User button plugged in
+- [ ] Display connected
+- [ ] Fan power module connected
+
+Milestone C: I/O complete, from RPi (M)
+
+- [ ] Get user button status (turn on)
+- [x] Get adjust potentiometer (power level)
+- [x] Set fan power
+- [x] Show text on display
+- [ ] Turn status LEDs on/off
+
+## Finito
+
+- [ ] Displays windspeed color
 
 Server datafetching
 
-- [ ] Define MQTT interface (J)
+- [x] Define MQTT interface (J)
 - [ ] Server fetches data using YR (J) 3
 - [ ] Fetch data using scraped HTML page (J) 3
 
@@ -81,37 +125,6 @@ Monitoring
 
 - [ ] Device reports heartbeat to server on MQTT (`fbp`)
 - [ ] Server stores heartbeat events
-
-Windgust animation
-
-- [ ] First version. Should depend on (average) windspeed
-- [ ] (optional) Try to make fan changes faster, over Modbus
-
-Mon 8
-Milestone B: All electronics assembled (M)
-
-- [ ] Make baseboard for mounting in box
-- [ ] USB to serial in dashboard
-- [ ] RPi as wifi access point
-- [x] Optocoupler for fancontrol. Non-inverting
-- [ ] RPi powered and running
-- [ ] Arduino with daughterboard
-- [ ] LEDs in control panel
-- [ ] Potmeter in control panel
-- [ ] Test button in control panel
-- [ ] User button plugged in
-- [ ] Display connected
-- [ ] Fan power module connected
-
-Fri 12 - Mon 16
-Milestone C: I/O complete, from RPi (M)
-
-- [ ] Turn status LEDs on/off
-- [ ] Get user button status (turn on)
-- [ ] Get adjust potentiometer (power level)
-- [ ] Get test button stats (full power)
-- [ ] Set fan power
-- [ ] Show text on display
 
 Thurs 25.
 Milestone D: System complete
@@ -126,7 +139,7 @@ Milestone D: System complete
 - [ ] Tested connectivity loss
 
 
-Failure modes
+## Failure modes
 
 - I/O failure. Software does right thing, but right action does not happen
 - RPi fails to fetch server. 3G connection, HTTP error, server down
@@ -142,9 +155,5 @@ Date,person,hours,area
     07.10.2018,jon,4,firmware
     09.10.2018,jon,1,planning
     09.10.2018,jon,4,io
-
-
-
-
 
 

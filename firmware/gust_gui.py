@@ -15,35 +15,71 @@ import pandas as pd
 
 import wp_ipc
 
-the_ipc_session = wp_ipc.Session()
-
-the_window = tk.Tk()
-the_window.title("A figure in a canvas")
-
-the_window.bind('<Escape>', sys.exit)
-
-the_canvas = tk.Canvas(the_window, width=300, height=200)
-the_canvas.pack()
-
-the_fig_photo = None
-
-the_period = 200
-the_noise = np.random.normal(0.0, 1.0, the_period)
-the_noise_series = pd.Series(the_noise)
 
 ##############################################################################
 
 
-def wind_speed_change(s_str):
-    s = float(s_str)
+# Poor-mans dataclasses, since we don't have Python 3.7
+class Inputs(): 
+  def __init__(self,
+        # Actual inputs
+        wind_speed  : float = 0.0,
+        scale : float = 1.0,
 
+        # Parameters
+        peturbation_period : float = 1.0,
+        peturbation_amplitude: float = 0.1,
+        noise_period : float = 0.1,
+        
+        time : float = 0.0):
+
+    attrs = locals()
+    del attrs['self']
+    self.__dict__.update(attrs)
+
+class State():
+  def __init__(self,
+        fan_duty : float = 0.0,
+
+        next_peturbation_update : float = 0.0,
+        noise = None,
+        noise_phase : int = 0 ):
+
+    attrs = locals()
+    del attrs['self']
+    self.__dict__.update(attrs)
+
+
+def next_state(current : State, inputs: Inputs):
+    state = copy.copy(current)
+
+    if state.noise is None:
+        state.noise = np.random.normal(0.0, 1.0, inputs.noise_period)
+
+    if inputs.time > current.next_peturbation_update:
+        n = the_noise[the_noise_phase]
+        p = perturbation_amplitude * n
+
+        state.noise_phase = state.noise_phase + 1 if the_noise_phase < inputs.noise_period - 1 else 0
+        state.peturbation = p
+        state.next_peturbation_update = inputs.time + inputs.peturbation_period
+
+    state.fan_duty = (1 / 40) * inputs.wind_speed * inputs.scale + state.perturbation
+
+    return state
+
+
+
+
+def plot():
     fig = mpl.figure.Figure(figsize=(3, 2))
 
     ax = fig.add_subplot(111)
 
     figure_canvas_agg = FigureCanvasAgg(fig)
 
-    dplt = the_noise_series.plot(ax=ax)
+    series = pandas.Series(data)
+    dplt = series.plot(ax=ax)
 
     figure_canvas_agg.draw()
     figure_x, figure_y, figure_w, figure_h = fig.bbox.bounds
@@ -61,186 +97,140 @@ def wind_speed_change(s_str):
     tkagg.blit(
         the_fig_photo, figure_canvas_agg.get_renderer()._renderer, colormode=2)
 
+    return the_fig_photo # XXX: has to be held
 
-the_wind_speed = tk.Scale(
-    the_window,
-    from_=0.0,
-    to=40.0,
-    resolution=0.1,
-    orient=tk.HORIZONTAL,
-    label="wind speed",
-    length=300,
-    command=wind_speed_change)
-the_wind_speed.pack()
-the_wind_speed.set(20.0)
 
-the_potentiometer = tk.Scale(
-    the_window,
-    from_=0.0,
-    to=1.0,
-    resolution=0.01,
-    orient=tk.HORIZONTAL,
-    label="potentiometer",
-    length=300,
-    command=None)
-the_potentiometer.pack()
-the_potentiometer.set(0.5)
+def setup_gui():
+    the_window = tk.Tk()
+    the_window.title("A figure in a canvas")
 
-the_perturbation_period = tk.Scale(
-    the_window,
-    from_=10,
-    to=10000,
-    resolution=1,
-    orient=tk.HORIZONTAL,
-    label="perturbation period (ms)",
-    length=300,
-    command=None)
-the_perturbation_period.pack()
-the_perturbation_period.set(1000)
+    the_window.bind('<Escape>', sys.exit)
 
-the_perturbation_amplitude = tk.Scale(
-    the_window,
-    from_=0.0,
-    to=1.0,
-    resolution=0.001,
-    orient=tk.HORIZONTAL,
-    label="perturbation amplitude",
-    length=300,
-    command=None)
-the_perturbation_amplitude.pack()
-the_perturbation_amplitude.set(0.1)
+    the_canvas = tk.Canvas(the_window, width=300, height=200)
+    the_canvas.pack()
 
-the_perturbation = tk.Scale(
-    the_window,
-    from_=-1.0,
-    to=1.0,
-    resolution=0.01,
-    orient=tk.HORIZONTAL,
-    label="perturbation",
-    length=300,
-    command=None)
-the_perturbation.pack()
+    the_fig_photo = None
 
-the_fan_duty = tk.Scale(
-    the_window,
-    from_=0.0,
-    to=1.0,
-    resolution=0.01,
-    orient=tk.HORIZONTAL,
-    label="fan duty",
-    length=300,
-    command=None)
-the_fan_duty.pack()
 
-tk.Label(the_window, text="\nsimulation\n").pack()
+    the_wind_speed = tk.Scale(
+        the_window,
+        from_=0.0,
+        to=40.0,
+        resolution=0.1,
+        orient=tk.HORIZONTAL,
+        label="wind speed",
+        length=300,
+        command=None)
+    the_wind_speed.pack()
+    the_wind_speed.set(20.0)
 
-the_fan_flow_response_up = tk.Scale(
-    the_window,
-    from_=0.00,
-    to=0.1,
-    resolution=0.001,
-    orient=tk.HORIZONTAL,
-    label="fan flow response up",
-    length=300,
-    command=None)
-the_fan_flow_response_up.pack()
-the_fan_flow_response_up.set(0.002)
+    the_potentiometer = tk.Scale(
+        the_window,
+        from_=0.0,
+        to=1.0,
+        resolution=0.01,
+        orient=tk.HORIZONTAL,
+        label="potentiometer",
+        length=300,
+        command=None)
+    the_potentiometer.pack()
+    the_potentiometer.set(0.5)
 
-the_fan_flow_response_down = tk.Scale(
-    the_window,
-    from_=0.00,
-    to=0.1,
-    resolution=0.001,
-    orient=tk.HORIZONTAL,
-    label="fan flow response down",
-    length=300,
-    command=None)
-the_fan_flow_response_down.pack()
-the_fan_flow_response_down.set(0.001)
+    the_perturbation_period = tk.Scale(
+        the_window,
+        from_=10,
+        to=10000,
+        resolution=1,
+        orient=tk.HORIZONTAL,
+        label="perturbation period (ms)",
+        length=300,
+        command=None)
+    the_perturbation_period.pack()
+    the_perturbation_period.set(1000)
 
-the_fan_flow = tk.Scale(
-    the_window,
-    from_=0.0,
-    to=1.0,
-    resolution=0.001,
-    orient=tk.HORIZONTAL,
-    label="fan flow",
-    length=300,
-    command=None)
-the_fan_flow.pack()
+    the_perturbation_amplitude = tk.Scale(
+        the_window,
+        from_=0.0,
+        to=1.0,
+        resolution=0.001,
+        orient=tk.HORIZONTAL,
+        label="perturbation amplitude",
+        length=300,
+        command=None)
+    the_perturbation_amplitude.pack()
+    the_perturbation_amplitude.set(0.1)
+
+    the_perturbation = tk.Scale(
+        the_window,
+        from_=-1.0,
+        to=1.0,
+        resolution=0.01,
+        orient=tk.HORIZONTAL,
+        label="perturbation",
+        length=300,
+        command=None)
+    the_perturbation.pack()
+
+    the_fan_duty = tk.Scale(
+        the_window,
+        from_=0.0,
+        to=1.0,
+        resolution=0.01,
+        orient=tk.HORIZONTAL,
+        label="fan duty",
+        length=300,
+        command=None)
+    the_fan_duty.pack()
+
+    tk.Label(the_window, text="\nsimulation\n").pack()
+
+    #the_fan_duty
+
+    widgets = {
+        'peturbation_period': the_perturbation_period,
+        'wind_speed': the_wind_speed,
+        'scale': the_potentiometer,
+    } 
+
+    return the_window, widgets
 
 ##############################################################################
 
 
-def ipc_recv():
-    published_values = the_ipc_session.recv()
+def update_inputs_ipc(inputs, ipc_session):
+    published_values = ipc_session.recv()
     for topic, value in published_values.items():
         if "potentiometer" == topic:
             the_potentiometer.set(value)
 
-    the_window.after(25, ipc_recv)
+def update_inputs_gui(inputs, widgets):
+    for name, widget in widgets.items():
+        inputs.__dict__[name] = float(widget.get())
+
+def main():
+    loop_interval = 100
+    state = State()
+    inputs = Inputs()
+
+    ipc_session = wp_ipc.Session()
+    window, widgets = setup_gui()
+
+    def loop():
+        nonlocal state
+        update_inputs_ipc(inputs, ipc_session)
+        update_inputs_gui(inputs, widgets)
+
+        state = next_state(state, inputs)
+
+        ipc_session.send("fan_duty", state.fan_duty)
+
+        window.after(loop_interval, loop)
+
+    loop()
+
+    tk.mainloop()
+
+if __name__ == '__main__':
+    main()
 
 
-ipc_recv()
-
-
-def ipc_send():
-    the_ipc_session.send("fan_duty", float(the_fan_duty.get()))
-    the_window.after(1000, ipc_send)
-
-
-ipc_send()
-
-the_noise_phase = 0
-
-
-def update_perturbation():
-    perturbation_amplitude = the_perturbation_amplitude.get()
-
-    global the_noise_phase
-
-    n = the_noise[the_noise_phase]
-    p = perturbation_amplitude * n
-
-    the_perturbation.set(p)
-
-    the_noise_phase = the_noise_phase + 1 if the_noise_phase < the_period - 1 else 0
-
-    the_window.after(the_perturbation_period.get(), update_perturbation)
-
-
-update_perturbation()
-
-
-def update_fan_duty():
-    wind_speed = the_wind_speed.get()
-    potentiometer = the_potentiometer.get()
-    perturbation = the_perturbation.get()
-
-    duty = (1 / 40) * wind_speed * potentiometer + perturbation
-
-    the_fan_duty.set(duty)
-
-    the_window.after(50, update_fan_duty)
-
-
-update_fan_duty()
-
-
-def update_fan_flow():
-    d = the_fan_duty.get()
-    f = the_fan_flow.get()
-
-    if f < d:
-        f += the_fan_flow_response_up.get()
-    elif d < f:
-        f -= the_fan_flow_response_down.get()
-
-    the_fan_flow.set(f)
-
-    the_window.after(50, update_fan_flow)
-
-
-update_fan_flow()
-
-tk.mainloop()

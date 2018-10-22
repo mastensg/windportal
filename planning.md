@@ -15,7 +15,7 @@ Risk moments
 
 Bugs
 
-- [ ] If Arduino is plugged, wp_firmata keeps running using 100% CPU.
+- [ ] If Arduino is unplugged, wp_firmata keeps running using 100% CPU.
 
 ## Deadlines
 

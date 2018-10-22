@@ -3,6 +3,7 @@
 import sys
 import tkinter as tk
 import time
+import copy
 
 import numpy as np
 import matplotlib as mpl
@@ -27,9 +28,9 @@ class Inputs():
         scale : float = 1.0,
 
         # Parameters
-        peturbation_period : float = 1.0,
-        peturbation_amplitude: float = 0.1,
-        noise_period : float = 0.1,
+        perturbation_period : float = 1000.0, # milliseconds
+        perturbation_amplitude: float = 0.1,
+        noise_period : int = 200,
         
         time : float = 0.0):
 
@@ -41,7 +42,8 @@ class State():
   def __init__(self,
         fan_duty : float = 0.0,
 
-        next_peturbation_update : float = 0.0,
+        perturbation : float = 0.0,
+        next_perturbation_update : float = 0.0,
         noise = None,
         noise_phase : int = 0 ):
 
@@ -56,13 +58,13 @@ def next_state(current : State, inputs: Inputs):
     if state.noise is None:
         state.noise = np.random.normal(0.0, 1.0, inputs.noise_period)
 
-    if inputs.time > current.next_peturbation_update:
-        n = the_noise[the_noise_phase]
-        p = perturbation_amplitude * n
+    if inputs.time >= current.next_perturbation_update:
+        n = state.noise[state.noise_phase]
+        p = inputs.perturbation_amplitude * n
 
-        state.noise_phase = state.noise_phase + 1 if the_noise_phase < inputs.noise_period - 1 else 0
-        state.peturbation = p
-        state.next_peturbation_update = inputs.time + inputs.peturbation_period
+        state.noise_phase = state.noise_phase + 1 if state.noise_phase < inputs.noise_period - 1 else 0
+        state.perturbation = p
+        state.next_perturbation_update = inputs.time + (inputs.perturbation_period/1000.0)
 
     state.fan_duty = (1 / 40) * inputs.wind_speed * inputs.scale + state.perturbation
 
@@ -186,13 +188,17 @@ def setup_gui():
 
     #the_fan_duty
 
-    widgets = {
-        'peturbation_period': the_perturbation_period,
+    inputs = {
+        'perturbation_period': the_perturbation_period,
         'wind_speed': the_wind_speed,
         'scale': the_potentiometer,
-    } 
+    }
+    outputs = {
+        'fan_duty': the_fan_duty,
+        'perturbation': the_perturbation,
+    }
 
-    return the_window, widgets
+    return the_window, inputs, outputs
 
 ##############################################################################
 
@@ -201,11 +207,18 @@ def update_inputs_ipc(inputs, ipc_session):
     published_values = ipc_session.recv()
     for topic, value in published_values.items():
         if "potentiometer" == topic:
-            the_potentiometer.set(value)
+            inputs.__dict__['scale'] = value
+        if "wind_speed" == topic:
+            inputs.__dict__['wind_speed'] = value
 
 def update_inputs_gui(inputs, widgets):
     for name, widget in widgets.items():
         inputs.__dict__[name] = float(widget.get())
+
+def set_outputs_gui(widgets, state):
+    for name, widget in widgets.items():
+        v = state.__dict__[name]
+        widgets[name].set(v)
 
 def main():
     loop_interval = 100
@@ -213,15 +226,22 @@ def main():
     inputs = Inputs()
 
     ipc_session = wp_ipc.Session()
-    window, widgets = setup_gui()
+    window, input_widgets, output_widgets = setup_gui()
 
     def loop():
         nonlocal state
+        inputs.__dict__['time'] = time.time()
         update_inputs_ipc(inputs, ipc_session)
-        update_inputs_gui(inputs, widgets)
+        update_inputs_gui(inputs, input_widgets)
 
         state = next_state(state, inputs)
 
+        s = copy.copy(state.__dict__)
+        del s['noise']
+        print('i', inputs.__dict__)
+        print('s', s)
+
+        set_outputs_gui(output_widgets, state) 
         ipc_session.send("fan_duty", state.fan_duty)
 
         window.after(loop_interval, loop)

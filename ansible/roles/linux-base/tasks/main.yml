@@ -21,6 +21,7 @@
         name: "{{ item.username }}"
         groups: sudo,systemd-journal
         append: yes
+        password: "{{ linux_user_password }}" # so can log in on serial console
       with_items:
         - "{{ superusers }}"
 

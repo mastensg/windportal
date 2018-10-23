@@ -3,12 +3,11 @@ import wp_ipc
 
 import gevent
 import gevent.event
-import numpy as np
 
 import sys
-import tkinter as tk
 import time
 import copy
+import random
 
 
 # Poor-mans dataclasses, since we don't have Python 3.7
@@ -47,7 +46,7 @@ def next_state(current : State, inputs: Inputs):
     state = copy.copy(current)
 
     if state.noise is None:
-        state.noise = np.random.normal(0.0, 1.0, inputs.noise_period)
+        state.noise = [ random.normalvariate(0.0, 1.0) for _ in range(inputs.noise_period) ]
 
     if inputs.time >= current.next_perturbation_update:
         n = state.noise[state.noise_phase]

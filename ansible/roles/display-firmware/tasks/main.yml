@@ -56,23 +56,25 @@
         MSGFLO_BROKER={{display_broker_url}}
         DISPLAY_PREFIX=display/{{ansible_hostname}}
       dest: /etc/windmachine/display.env
-  - name: Copy service file
+  - name: Copy service files
     copy:
-      src: etc/systemd/system/display-firmware.service
-      dest: /etc/systemd/system/display-firmware.service
-  - name: Start systemd service
+      src: "etc/systemd/system/{{item}}.service"
+      dest: "/etc/systemd/system/{{item}}.service"
+    with_items:
+      - display-firmata
+      - display-firmware
+      - display-forwarder
+      - display-gust
+  - name: Start systemd services
     systemd:
-      name: display-firmware
+      name: "{{item}}"
       state: restarted # TODO, only restart when needed 
       enabled: yes
       daemon_reload: yes # TODO, only restart on need
-  - name: Copy service file
-    copy:
-      src: etc/systemd/system/display-firmata.service
-      dest: /etc/systemd/system/display-firmata.service
-  - name: Start systemd service
-    systemd:
-      name: display-firmata
-      state: restarted # TODO, only restart when needed 
-      enabled: yes
-      daemon_reload: yes # TODO, only restart on need
+    with_items:
+      - display-firmata
+      - display-firmware
+      - display-forwarder
+      - display-gust
+
+

@@ -61,11 +61,21 @@
       requirements: './requirements.txt'
       virtualenv: /opt/windmachine/venv
       virtualenv_python: '/usr/bin/python3.5'
+  - name: Configure wp_visuals
+    tags: visuals
+    shell: "sudo -u display ./autogen_vc.sh"
+    args:
+      chdir: /opt/windmachine/firmware/wp_visuals
+  - name: Make wp_visuals
+    tags: visuals
+    shell: "sudo -u display make -j4"
+    args:
+      chdir: /opt/windmachine/firmware/wp_visuals
   - name: Service config dir
     file:
       path: /etc/windmachine
       state: directory
-  - name: Provide settings as environment vars 
+  - name: Provide settings as environment vars
     copy:
       content: |
         MSGFLO_BROKER={{display_broker_url}}

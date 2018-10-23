@@ -52,6 +52,7 @@
     copy:
       content: |
         BROKER_URL={{hub_broker_url}}
+        FETCH_INTERVAL=600
       dest: /etc/windportal/web.env
   - name: Copy service files
     tags: systemd

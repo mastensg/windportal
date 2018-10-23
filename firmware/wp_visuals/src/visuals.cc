@@ -123,8 +123,8 @@ void reload_main(int argc, char *argv[], void **data, const int *changed) {
     as->wind_speed = 0.0f;
 
     // font
-    // WP_FONT environment variable
-    {
+    char *wp_font_path = getenv("WP_FONT_PATH");
+    if (nullptr != wp_font_path) {
       FT_Library ft_library;
       {
         FT_Error ft_status = FT_Init_FreeType(&ft_library);
@@ -133,13 +133,13 @@ void reload_main(int argc, char *argv[], void **data, const int *changed) {
 
       FT_Face ft_face;
       {
-        const char *font_path =
-            "/home/mastensg/equinor_fonts/Equinor-Medium.otf";
-        FT_Error ft_status = FT_New_Face(ft_library, font_path, 0, &ft_face);
+        FT_Error ft_status = FT_New_Face(ft_library, wp_font_path, 0, &ft_face);
         assert(0 == ft_status);
       }
 
       as->cairo_font_face = cairo_ft_font_face_create_for_ft_face(ft_face, 0);
+    } else {
+      std::fprintf(stderr, "no custom font (WP_FONT_PATH)\n");
     }
 
     // ipc

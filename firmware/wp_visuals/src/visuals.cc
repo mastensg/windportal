@@ -95,6 +95,7 @@ void pixels_of_surface(uint8_t *pixels, cairo_surface_t *surface, int width,
 struct AppState {
   float wind_speed;
   cairo_font_face_t *cairo_font_face;
+  cairo_surface_t *cairo_logo_surface;
   void *zmq_ctx;
   void *zmq_pub;
   void *zmq_sub;
@@ -122,7 +123,15 @@ void reload_main(int argc, char *argv[], void **data, const int *changed) {
 
     as->wind_speed = 0.0f;
 
+    // logo
+    {
+      const char *logo_path = "./logo.png";
+
+      as->cairo_logo_surface = cairo_image_surface_create_from_png(logo_path);
+    }
+
     // font
+    // WP_FONT environment variable
     {
       FT_Library ft_library;
       {
@@ -133,7 +142,7 @@ void reload_main(int argc, char *argv[], void **data, const int *changed) {
       FT_Face ft_face;
       {
         const char *font_path =
-            "/home/mastensg/src/voxel/AccanthisADFStdNo3-Regular.otf";
+            "/home/mastensg/equinor_fonts/Equinor-Medium.otf";
         FT_Error ft_status = FT_New_Face(ft_library, font_path, 0, &ft_face);
         assert(0 == ft_status);
       }
@@ -163,8 +172,8 @@ void reload_main(int argc, char *argv[], void **data, const int *changed) {
 
   platform::reload_begin(p);
 
-  const int temp_width = 1920;
-  const int temp_height = 1080;
+  const int temp_width = 1280;
+  const int temp_height = 800;
   const int temp_channels = 3;
   uint8_t temp_image[temp_height * temp_width * temp_channels];
 
@@ -212,41 +221,80 @@ void reload_main(int argc, char *argv[], void **data, const int *changed) {
       }
 
       {
-        const char *topic = "potentiometer ";
+        const char *topic = "wind_speed ";
         if (0 == strncmp(topic, buf, strlen(topic))) {
           float value;
           sscanf(buf + strlen(topic), "%f", &value);
-          as->wind_speed = 40.0f * value;
+          as->wind_speed = value;
         }
       }
     }
 
-    if (true) {
+    {
       cairo_surface_t *surface = cairo_image_surface_create(
           CAIRO_FORMAT_ARGB32, temp_width, temp_height);
 
       cairo_t *cr = cairo_create(surface);
       cairo_surface_destroy(surface);
 
-      cairo_set_source_rgba(cr, 1.0, 1.0, 1.0, 1.0);
+      // background
+
+#if 0
+      // dd de e0
+      cairo_set_source_rgba(cr, 0.867, 0.871, 0.878, 1.0);
+#else
+      const double bgl = 0.85;
+      cairo_set_source_rgba(cr, bgl * 0.867, bgl * 0.871, bgl * 0.878, 1.0);
+#endif
+
       cairo_rectangle(cr, 0.0, 0.0, temp_width, temp_height);
       cairo_fill(cr);
 
-      cairo_set_source_rgba(cr, 0.0, 0.0, 0.0, 1.0);
+      // logo
+      if (false) {
+        const double scale = 0.2;
+        const double rscale = 1.0 / scale;
+        const double left = 30.0;
+        const double top = 30.0;
 
-      cairo_set_font_face(cr, as->cairo_font_face);
+        cairo_save(cr);
 
-      const double left = 400.0;
-      const double fs = 300.0;
-      const double margin = (temp_height - 3.0 * fs) / 4.5;
-      cairo_set_font_size(cr, fs);
+        cairo_move_to(cr, left, top);
+        cairo_scale(cr, scale, scale);
+        cairo_set_source_surface(cr, as->cairo_logo_surface, rscale * left,
+                                 rscale * top);
+        cairo_paint(cr);
 
+        cairo_restore(cr);
+      }
+
+      // wind speed text
       {
-        char temp[100];
-        std::sprintf(temp, "%3.1f m/s", as->wind_speed);
+        const double font_size = 270.0;
+        const double left = 160.0;
+        const double top = 500.0;
 
-        cairo_move_to(cr, left, 1.0 * (margin + fs));
-        cairo_show_text(cr, temp);
+#if 0
+        // ff 00 37
+        cairo_set_source_rgba(cr, 1.0, 0.0, 0.216, 1.0);
+#endif
+#if 0
+        // e8 36 43
+        cairo_set_source_rgba(cr, 0.910, 0.212, 0.263, 1.0);
+#endif
+#if 1
+        // 38 38 38
+        cairo_set_source_rgba(cr, 0.220, 0.220, 0.220, 1.0);
+#endif
+
+        cairo_set_font_face(cr, as->cairo_font_face);
+        cairo_set_font_size(cr, font_size);
+
+        char str[100];
+        std::sprintf(str, "%3.1f m/s", as->wind_speed);
+
+        cairo_move_to(cr, left, top);
+        cairo_show_text(cr, str);
       }
 
       pixels_of_surface(temp_image, surface, temp_width, temp_height);

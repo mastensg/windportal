@@ -17,6 +17,9 @@
       - libfreetype6-dev
       - libinput-dev
       - libzmq3-dev
+
+      # gust_gui
+      - python3-tk
   - name: unprivileged user
     user:
       name: display

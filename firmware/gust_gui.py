@@ -5,15 +5,6 @@ import tkinter as tk
 import time
 import copy
 
-import numpy as np
-import matplotlib as mpl
-import matplotlib.backends.tkagg as tkagg
-from matplotlib.backends.backend_agg import FigureCanvasAgg
-from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg,
-                                               NavigationToolbar2Tk)
-
-import pandas as pd
-
 import wp_ipc
 import wp_gust
 
@@ -22,6 +13,13 @@ import wp_gust
 
 
 def plot():
+    import matplotlib as mpl
+    import matplotlib.backends.tkagg as tkagg
+    from matplotlib.backends.backend_agg import FigureCanvasAgg
+    from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg,
+                                                   NavigationToolbar2Tk)
+    import pandas as pd
+
     fig = mpl.figure.Figure(figsize=(3, 2))
 
     ax = fig.add_subplot(111)

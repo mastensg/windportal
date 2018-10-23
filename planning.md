@@ -16,6 +16,7 @@ Risk moments
 Bugs
 
 - [ ] If Arduino is unplugged, wp_firmata keeps running using 100% CPU.
+- [ ] ssh-call-home sometimes hangs, does not reconnect after network or server disconnect
 
 ## Deadlines
 

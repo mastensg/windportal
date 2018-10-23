@@ -4,7 +4,7 @@ Key questions
 - [x] OK with FOSS (Sjur)
 - [x] Fan control interface. Analog or modbus
 - [x] Decide display. LCD, dial indicator or 7-segment.
-- [ ] Get a custom domain (dep: Sjur)
+- [x] Get a custom domain (dep: Sjur) `windportal.dept.no`
 - [ ] Ownership server,SIM (dep: Sjur)
 
 Risk moments
@@ -17,6 +17,11 @@ Bugs
 
 - [ ] If Arduino is unplugged, wp_firmata keeps running using 100% CPU.
 - [ ] ssh-call-home sometimes hangs, does not reconnect after network or server disconnect
+- [ ] 4G connection not showing up
+
+Tools
+
+- [ ] CLI for sending IPC message `wp_ipc KEY VALUE`
 
 ## Deadlines
 
@@ -55,26 +60,27 @@ Milestone FANCONTROL:
 
 ### System check, Oct 23
 
-Communicate
+Buy
 
-- [ ] Screen needs waterproofing
+- [ ] 5V + 12V PSUs
+- [ ] Power supply enclosure
+- [ ] Wago connectors
 
 Documentation
 
-- [ ] Make block diagram of electronics
+- [x] Make block diagram of electronics
 
 Windgust animation
 
 - [x] First version. Should depend on (average) windspeed
-- [ ] Move animation to dedicated program (J)
-- [ ] systemd/Ansible for services (J)
+- [x] Move animation to dedicated program (J)
+- [x] systemd/Ansible for services (J)
 
 Display:
 
 - [x] Test servocontrol for dial type display. Incl a simple hand. (M)
 - [x] Screen tested OK
 - [x] Program to display windspeed
-- [ ] Using right font, colors. Centered
 
 Electronics requirements
 
@@ -83,19 +89,18 @@ Electronics requirements
 
 Control panel
 
-- [ ] Status LEDs
-- [ ] Potmeter animation scale
-- [ ] Potmeter manual fan control
-- [ ] Software/manual switch
+- [x] Status LEDs
+- [x] Potmeter animation scale
+- [x] Potmeter manual fan control
+- [x] Software/manual switch
 
 Milestone B: All electronics assembled (M)
 
-- [ ] Baseboard for mounting in box
-- [ ] USB to serial in dashboard
-- [ ] RPi as wifi access point
+- [x] Baseboard for mounting in box
 - [x] Optocoupler for fancontrol. Non-inverting
+- [ ] USB to serial in dashboard
 - [ ] RPi powered and running
-- [ ] Arduino with daughterboard
+- [x] Arduino with daughterboard
 - [ ] User button plugged in
 - [ ] Display connected
 - [ ] Fan power module connected

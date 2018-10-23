@@ -95,6 +95,7 @@ void pixels_of_surface(uint8_t *pixels, cairo_surface_t *surface, int width,
 struct AppState {
   float wind_speed;
   cairo_font_face_t *cairo_font_face;
+  cairo_surface_t *cairo_logo_surface;
   void *zmq_ctx;
   void *zmq_pub;
   void *zmq_sub;
@@ -122,7 +123,15 @@ void reload_main(int argc, char *argv[], void **data, const int *changed) {
 
     as->wind_speed = 0.0f;
 
+    // logo
+    {
+      const char *logo_path = "./logo.png";
+
+      as->cairo_logo_surface = cairo_image_surface_create_from_png(logo_path);
+    }
+
     // font
+    // WP_FONT environment variable
     {
       FT_Library ft_library;
       {
@@ -229,19 +238,55 @@ void reload_main(int argc, char *argv[], void **data, const int *changed) {
       cairo_surface_destroy(surface);
 
       // background
+
+#if 0
       // dd de e0
       cairo_set_source_rgba(cr, 0.867, 0.871, 0.878, 1.0);
+#else
+      const double bgl = 0.85;
+      cairo_set_source_rgba(cr, bgl * 0.867, bgl * 0.871, bgl * 0.878, 1.0);
+#endif
+
       cairo_rectangle(cr, 0.0, 0.0, temp_width, temp_height);
       cairo_fill(cr);
 
-      // wind speed text
-      // ff 00 37
-      {
-        const double font_size = 200.0;
-        const double left = 270.0;
-        const double top = 470.0;
+      // logo
+      if (false) {
+        const double scale = 0.2;
+        const double rscale = 1.0 / scale;
+        const double left = 30.0;
+        const double top = 30.0;
 
+        cairo_save(cr);
+
+        cairo_move_to(cr, left, top);
+        cairo_scale(cr, scale, scale);
+        cairo_set_source_surface(cr, as->cairo_logo_surface, rscale * left,
+                                 rscale * top);
+        cairo_paint(cr);
+
+        cairo_restore(cr);
+      }
+
+      // wind speed text
+      {
+        const double font_size = 270.0;
+        const double left = 160.0;
+        const double top = 500.0;
+
+#if 0
+        // ff 00 37
         cairo_set_source_rgba(cr, 1.0, 0.0, 0.216, 1.0);
+#endif
+#if 0
+        // e8 36 43
+        cairo_set_source_rgba(cr, 0.910, 0.212, 0.263, 1.0);
+#endif
+#if 1
+        // 38 38 38
+        cairo_set_source_rgba(cr, 0.220, 0.220, 0.220, 1.0);
+#endif
+
         cairo_set_font_face(cr, as->cairo_font_face);
         cairo_set_font_size(cr, font_size);
 

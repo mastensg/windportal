@@ -62,7 +62,7 @@
       dest: "/etc/systemd/system/{{item}}.service"
     with_items:
       - display-firmata
-      - display-firmware
+      - display-mqtt
       - display-forwarder
       - display-gust
   - name: Start systemd services
@@ -73,7 +73,7 @@
       daemon_reload: yes # TODO, only restart on need
     with_items:
       - display-firmata
-      - display-firmware
+      - display-mqtt
       - display-forwarder
       - display-gust
 

@@ -1,5 +1,5 @@
 [Service]
-ExecStart=/opt/windmachine/venv/bin/python /opt/windmachine/firmware/display.py
+ExecStart=/opt/windmachine/venv/bin/python /opt/windmachine/firmware/wp_mqtt.py
 WorkingDirectory=/opt/windmachine/firmware
 Restart=always
 RestartSec=3

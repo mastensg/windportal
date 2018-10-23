@@ -8,6 +8,10 @@
       - python-setuptools
       - virtualenv
       - rsync
+      - autoconf
+      - libcairo2-dev
+      - libfreetype6-dev
+      - libzmq3-dev
   - name: unprivileged user
     user:
       name: display

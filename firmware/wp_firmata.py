@@ -28,6 +28,10 @@ def main():
         for topic, value in published_values.items():
             if "fan_duty" == topic:
                 fan_duty255 = int(255 * value)
+                if fan_duty255 > 255:
+                    fan_duty255 = 255
+                if fan_duty255 < 0:
+                    fan_duty255 = 0
                 board.analog_write(FAN_PIN, fan_duty255)
             elif "gauge_degrees" == topic:
                 board.analog_write(GAUGE_PIN, 180 - value)

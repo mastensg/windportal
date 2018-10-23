@@ -34,6 +34,21 @@
       dest: /opt/windmachine/firmware
       delete: yes
       archive: yes
+  - name: Copy fonts archive
+    tags: fonts
+    copy:
+      src: opt/windmachine/equinor_fonts.tar.gz
+      dest: /opt/windmachine/equinor_fonts.tar.gz
+      owner: display
+      group: display
+  - name: Extract fonts archive
+    tags: fonts
+    unarchive:
+      src: /opt/windmachine/equinor_fonts.tar.gz
+      dest: /opt/windmachine/
+      owner: display
+      group: display
+      remote_src: yes
   - name: Set permissions
     file:
       path: /opt/windmachine

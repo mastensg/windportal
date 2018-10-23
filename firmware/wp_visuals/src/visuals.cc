@@ -272,7 +272,7 @@ void reload_main(int argc, char *argv[], void **data, const int *changed) {
       {
         const double font_size = 270.0;
         const double left = 160.0;
-        const double top = 500.0;
+        const double top = 490.0;
         const double width = 1010.0;
 
 #if 0

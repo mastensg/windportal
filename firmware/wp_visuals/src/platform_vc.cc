@@ -9,7 +9,6 @@
 #include <GLES2/gl2.h>
 #include <bcm_host.h>
 
-#include "imgui/imgui.h"
 #include "platform.h"
 
 namespace platform {
@@ -135,10 +134,10 @@ static const char *egl_strerror(EGLint error) {
 }
 
 static void egl_init(Platform *p, NativeWindowType native_window) {
-  static const EGLint config_attrib_list[] = {EGL_RED_SIZE,   8,  //
-                                              EGL_GREEN_SIZE, 8,  //
-                                              EGL_BLUE_SIZE,  8,  //
-                                              EGL_ALPHA_SIZE, 8,  //
+  static const EGLint config_attrib_list[] = {EGL_RED_SIZE,   8,   //
+                                              EGL_GREEN_SIZE, 8,   //
+                                              EGL_BLUE_SIZE,  8,   //
+                                              EGL_ALPHA_SIZE, 8,   //
                                               EGL_DEPTH_SIZE, 16,  //
                                               EGL_NONE};
   static const EGLint context_attrib_list[] = {EGL_CONTEXT_CLIENT_VERSION, 2,
@@ -201,26 +200,10 @@ void reload_init(Platform *p) {
   egl_init(p, window);
 
   glViewport(0, 0, w, h);
-
-  // imgui
-  {
-    ImGuiIO &io = ImGui::GetIO();
-    unsigned char *pixels;
-    int width, height;
-    io.Fonts->GetTexDataAsRGBA32(&pixels, &width, &height);
-  }
 }
 
 void reload_begin(Platform *p) {
   (void)p;
-
-  // imgui
-  ImGuiIO &io = ImGui::GetIO();
-
-  io.RenderDrawListsFn = nullptr;
-  io.GetClipboardTextFn = nullptr;
-  io.SetClipboardTextFn = nullptr;
-  io.ClipboardUserData = nullptr;
 }
 
 bool reload_end(Platform *p) {
@@ -233,19 +216,9 @@ bool reload_end(Platform *p) {
 
 void frame_begin(Platform *p) {
   (void)p;
-
-  // imgui
-  {
-    ImGuiIO &io = ImGui::GetIO();
-
-    io.DisplaySize = ImVec2(0.0f, 0.0f);
-    ImGui::NewFrame();
-  }
 }
 
 bool frame_end(Platform *p) {
-  ImGui::EndFrame();
-
   eglSwapBuffers(p->internal->display, p->internal->surface);
 
   return false;

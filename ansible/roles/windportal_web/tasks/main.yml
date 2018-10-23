@@ -1,0 +1,73 @@
+- name: Windportal web
+  tags: windportal_web
+  block:
+  - name: Install system dependencies
+    tags: apt
+    apt:
+      name:
+      - python3-pip
+      - python-setuptools
+      - virtualenv
+      - rsync
+  - name: unprivileged user
+    user:
+      name: windportal
+      state: present
+
+  - name: server root dir
+    file:
+      path: /opt/windportal/server
+      owner: windportal
+      group: windportal
+      state: directory
+
+  - name: Copy server code
+    synchronize:
+      src: '../../server/'
+      dest: /opt/windportal/server
+      delete: yes
+      archive: yes
+
+  - name: Set permissions
+    file:
+      path: /opt/windportal
+      recurse: true
+      owner: windportal
+      group: windportal
+  - name: Install Python packages
+    pip:
+      chdir: '/opt/windportal/server'
+      requirements: './requirements.txt'
+      virtualenv: /opt/windportal/venv
+      virtualenv_python: '/usr/bin/python3.5'
+
+  - name: Service config dir
+    tags: systemd
+    file:
+      path: /etc/windportal
+      state: directory
+
+  - name: Provide settings as environment vars
+    tags: systemd
+    copy:
+      content: |
+        BROKER_URL={{hub_broker_url}}
+      dest: /etc/windportal/web.env
+  - name: Copy service files
+    tags: systemd
+    copy:
+      src: "etc/systemd/system/{{item}}.service"
+      dest: "/etc/systemd/system/{{item}}.service"
+    with_items:
+      - windportal_web
+  - name: Start systemd services
+    tags: systemd
+    systemd:
+      name: "{{item}}"
+      state: restarted # TODO, only restart when needed 
+      enabled: yes
+      daemon_reload: yes # TODO, only restart on need
+    with_items:
+      - windportal_web
+
+

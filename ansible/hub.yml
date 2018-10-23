@@ -8,3 +8,4 @@
     - root_alias
     - mosquitto_broker
     - unattended_upgrades
+    - windportal_web

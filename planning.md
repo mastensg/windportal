@@ -117,7 +117,7 @@ Display
 
 - [ ] Hide startup rainbow, linux messages from screen
 - [ ] Hide low-power symbol
-- [ ] Add a small variation to shown windspee
+- [ ] Add a small variation to shown windspeed
 
 Server datafetching
 

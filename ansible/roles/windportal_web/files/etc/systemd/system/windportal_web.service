@@ -1,0 +1,14 @@
+[Service]
+ExecStart=/opt/windportal/venv/bin/python /opt/windportal/server/wp_web.py
+WorkingDirectory=/opt/windportal/server
+Restart=always
+RestartSec=3
+User=windportal
+Group=windportal
+EnvironmentFile=/etc/windportal/web.env
+
+[Unit]
+After=network-online.target
+
+[Install]
+WantedBy=multi-user.target

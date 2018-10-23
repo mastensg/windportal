@@ -2,11 +2,8 @@
 
 import gevent.monkey
 gevent.monkey.patch_all() # make sure all syncronous calls in stdlib yields to gevent
-
-import gevent.pywsgi
-import flask
 import paho.mqtt.client as mqtt
-import werkzeug.security as wsecurity
+import lxml.html
 
 import urllib.request
 import urllib.parse
@@ -26,9 +23,6 @@ log_level = os.environ.get('LOGLEVEL', 'info')
 log = logging.getLogger('server')
 log.setLevel(getattr(logging, log_level.upper()))
 
-
-
-import lxml.html 
 
 def assert_valid_windspeed(w):
     assert isinstance(w, numbers.Number), "Windspeed not a number: {}".format(type(w))
@@ -81,7 +75,7 @@ def seen_since(messages, time : float):
             devices[d] = t
     return devices
 
-def setup_app(broker_url, check_interval=30*60):
+def setup_app(broker_url, check_interval=30*60, done_cb=None):
     wind_speed = 0.1111
     heartbeat_messages = []
     running = True
@@ -148,6 +142,8 @@ def setup_app(broker_url, check_interval=30*60):
             except Exception as e:
                 log.exception('Failed to fetch data: {}'.format(str(e)))
             gevent.sleep(check_interval)
+        if done_cb:
+            done_cb()
 
     fetch_and_publish() 
     gevent.spawn(fetcher)
@@ -160,9 +156,13 @@ def setup_app(broker_url, check_interval=30*60):
 
 def main():
     broker_url = os.environ.get('BROKER_URL', 'mqtt://localhost')
-    app = setup_app(broker_url)
+    fetch_interval = float(os.environ.get('FETCH_INTERVAL', 15*60))
+
+    done = gevent.event.AsyncResult()   
+    app = setup_app(broker_url, check_interval=fetch_interval, done_cb=lambda x: done.set(None))
     log.info('Fetcher running')
 
+    done.get(timeout=None) # wait forever
 
 if __name__ == '__main__':
     main()

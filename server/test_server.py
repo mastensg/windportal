@@ -4,17 +4,17 @@ import os
 import pytest
 import gevent
 
-import data
+import wp_web
 
 BROKER = os.environ.get('BROKER_URL', 'mqtt://localhost')
 
 def test_fetch_windspeed():
-    wind = data.windspeed_ukenergy()
+    wind = wp_web.windspeed_ukenergy()
     assert 1.0 < wind < 25.0
 
 @pytest.fixture()
 def mqtt_client():
-    mqtt_client, host, port = data.create_mqtt_client(BROKER)
+    mqtt_client, host, port = wp_web.create_mqtt_client(BROKER)
     timeout = 2
     r = mqtt_client.connect(host, port, timeout)
 
@@ -24,7 +24,7 @@ def mqtt_client():
 
 @pytest.fixture()
 def fetcher():
-    shutdown_app = data.setup_app(broker_url=BROKER, check_interval=0.5)
+    shutdown_app = wp_web.setup_app(broker_url=BROKER, check_interval=0.5)
     yield None
     shutdown_app()
 

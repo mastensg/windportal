@@ -21,7 +21,7 @@
     user:
       name: display
       state: present
-      groups: gpio,dialout
+      groups: gpio,dialout,video
   - name: firmware root dir
     file:
       path: /opt/windmachine/firmware

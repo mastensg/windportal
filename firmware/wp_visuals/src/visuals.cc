@@ -95,7 +95,6 @@ void pixels_of_surface(uint8_t *pixels, cairo_surface_t *surface, int width,
 struct AppState {
   float wind_speed;
   cairo_font_face_t *cairo_font_face;
-  cairo_surface_t *cairo_logo_surface;
   void *zmq_ctx;
   void *zmq_pub;
   void *zmq_sub;
@@ -122,13 +121,6 @@ void reload_main(int argc, char *argv[], void **data, const int *changed) {
     AppState *as = &the_session->as;
 
     as->wind_speed = 0.0f;
-
-    // logo
-    {
-      const char *logo_path = "./logo.png";
-
-      as->cairo_logo_surface = cairo_image_surface_create_from_png(logo_path);
-    }
 
     // font
     // WP_FONT environment variable
@@ -249,24 +241,6 @@ void reload_main(int argc, char *argv[], void **data, const int *changed) {
 
       cairo_rectangle(cr, 0.0, 0.0, temp_width, temp_height);
       cairo_fill(cr);
-
-      // logo
-      if (false) {
-        const double scale = 0.2;
-        const double rscale = 1.0 / scale;
-        const double left = 30.0;
-        const double top = 30.0;
-
-        cairo_save(cr);
-
-        cairo_move_to(cr, left, top);
-        cairo_scale(cr, scale, scale);
-        cairo_set_source_surface(cr, as->cairo_logo_surface, rscale * left,
-                                 rscale * top);
-        cairo_paint(cr);
-
-        cairo_restore(cr);
-      }
 
       // wind speed text
       {

@@ -9,15 +9,14 @@ Key questions
 
 Risk moments
 
-- [ ] Interfacing fan,display
-- [ ] Data communication device,server,datasource
-- [ ] In-field failures
+- Interfacing fan,display
+- Data communication device,server,datasource
+- In-field failures
 
 Bugs
 
 - [ ] If Arduino is unplugged, wp_firmata keeps running using 100% CPU.
 - [ ] ssh-call-home sometimes hangs, does not reconnect after network or server disconnect
-- [ ] 4G connection not showing up
 
 Tools
 
@@ -56,15 +55,26 @@ Milestone FANCONTROL:
 
 - [x] Tested control of fan from software (via Firmata, analog/PWM) 
 
+Control panel
+
+- [x] Status LEDs
+- [x] Potmeter animation scale
+- [x] Potmeter manual fan control
+- [x] Software/manual switch
+
+Milestone B: All electronics assembled (M)
+
+- [x] Baseboard for mounting in box
+- [x] Optocoupler for fancontrol. Non-inverting
+- [x] USB to serial in dashboard
+- [x] RPi powered and running
+- [x] Arduino with daughterboard
+- [x] Display connected
+- [x] Fan power module connected
+
 ## TODO
 
 ### System check, Oct 23
-
-Buy
-
-- [ ] 5V + 12V PSUs
-- [ ] Power supply enclosure
-- [ ] Wago connectors
 
 Documentation
 
@@ -82,64 +92,54 @@ Display:
 - [x] Screen tested OK
 - [x] Program to display windspeed
 
-Electronics requirements
-
-- [ ] Test user button input
-- [x] Test RPI USB serial terminal
-
-Control panel
-
-- [x] Status LEDs
-- [x] Potmeter animation scale
-- [x] Potmeter manual fan control
-- [x] Software/manual switch
-
-Milestone B: All electronics assembled (M)
-
-- [x] Baseboard for mounting in box
-- [x] Optocoupler for fancontrol. Non-inverting
-- [ ] USB to serial in dashboard
-- [ ] RPi powered and running
-- [x] Arduino with daughterboard
-- [ ] User button plugged in
-- [ ] Display connected
-- [ ] Fan power module connected
-
 Milestone C: I/O complete, from RPi (M)
 
-- [ ] Get user button status (turn on)
 - [x] Get adjust potentiometer (power level)
 - [x] Set fan power
 - [x] Show text on display
-- [ ] Turn status LEDs on/off
 
-## Finito
+## Assembly, Friday Oct 26
 
-- [ ] Displays windspeed color
+Electronics
+
+- [ ] Buy power supplies. 5V + 12V
+- [ ] Buy enclosure(s) PSU
+- [ ] Buy Wago connectors
+- [ ] Use cable glands on wires
+
+User button
+
+- [ ] Test user button input
+- [ ] Firmata: get user button status (turn on)
+- [ ] Scale gusts based on user input
+
+Display
+
+- [ ] Hide startup rainbow, linux messages from screen
+- [ ] Hide low-power symbol
+- [ ] Add a small variation to shown windspee
 
 Server datafetching
 
 - [x] Define MQTT interface (J)
-- [ ] Server fetches data using YR (J) 3
-- [ ] Fetch data using scraped HTML page (J) 3
+- [x] Server fetches data using YR (J) 3
+- [x] Fetch data using scraped HTML page (J) 3
+- [ ] Deploy data fetcher to hub
 
 Monitoring
 
+- [ ] Turn status LEDs in panel on/off
 - [ ] Device reports heartbeat to server on MQTT (`fbp`)
 - [ ] Server stores heartbeat events
 
-Thurs 25.
-Milestone D: System complete
+System complete checklist
 
-- [ ] Hide startup rainbow, linux messages from screen
 - [ ] Monitoring exists
 - [ ] Windgust animation works
 - [ ] Tested device poweroffs
 - [ ] Tested device disconnect/reconnect
 - [ ] Tested server downtime
 - [ ] Tested full gust button
-- [ ] Tested connectivity loss
-
 
 ## Failure modes
 

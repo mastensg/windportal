@@ -1,8 +1,11 @@
 hub      ansible_host=hub.wind.mastensg.net
 display0 ansible_host=display0.local
+display1 ansible_host=display1.local
+
 
 [hubs]
 hub
 
 [displays]
 display0
+display1

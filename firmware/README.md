@@ -21,6 +21,10 @@ Afterwards the SSH keys are in place
 
     ansible-playbook display.yml -l display0
 
+## Flash base image
+
+    gunzip -c display0-raspbian.img | sudo dd of=/dev/MYSCARD status=progress oflag=sync bs=1M
+
 ## Make base image
 To make something flashable of a known size (under 4GB) with a known hostname.
 
@@ -29,6 +33,7 @@ To make something flashable of a known size (under 4GB) with a known hostname.
 * Mount `/` filesytem, change hostname and hosts to `display0`
 * Enable workstation in `/etc/avahi-daemon.conf`: `publish-workstation=yes`
 * Mount `/boot` filesyste. Add empty `ssh` file to enable SSH
+* Add `enable_uart=1` and `dtoverlay=pi3-disable-bt` to `/boot/config.txt` for serial console
 * Put SDCard into RPi, connect Ethernet cable to PC
 * Boot RPi, check that you can SSH into it `ssh pi@display0.local`
 * Check that automatic partition resizing was completed
@@ -37,7 +42,4 @@ To make something flashable of a known size (under 4GB) with a known hostname.
 * Resize root partition to 3100M with `cfdisk`
 * Make image using `dd if=/dev/mmcblk1 conv=sync,noerror bs=1M count=8k | gzip -c > display0-raspbian.img.gz`
 
-## Flash base image
 
-
-    gunzip -c display0-rasbian.img | sudo dd of=/dev/MYSCARD status=progress oflag=sync bs=1M

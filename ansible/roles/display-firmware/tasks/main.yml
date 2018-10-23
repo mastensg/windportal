@@ -2,15 +2,20 @@
   tags: display-firmware
   block:
   - name: Install system dependencies
+    tags: apt
     apt:
       name:
       - python3-pip
       - python-setuptools
       - virtualenv
       - rsync
+
+      # wp_visuals
       - autoconf
+      - libtool
       - libcairo2-dev
       - libfreetype6-dev
+      - libinput-dev
       - libzmq3-dev
   - name: unprivileged user
     user:

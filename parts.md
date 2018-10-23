@@ -1,3 +1,15 @@
+power supply
+------------
+
+5V 4A + 12V 1A                      250 kr
+https://www.kjell.com/no/produkter/elektro-og-verktoy/stromforsyning/stromforsyning/ac-dc/fast-utgangsspenning/mean-well-switchet-stromaggregat-5-12-v-(dc)-32-w-p44237
+
+sukkerbit                           100 kr
+https://www.kjell.com/no/produkter/elektro-og-verktoy/elektrisk-installasjon/kobling-bokser-lister/wago-221-412-toppklemme-med-2-tilkoblinger-16-pk--p36900
+
+koblingsboks                        120 kr
+https://www.clasohlson.com/no/Koblingsboks/Pr327387000
+
 servo-motor for å styre spjeld
 ------------------------------
 

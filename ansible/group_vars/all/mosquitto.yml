@@ -3,10 +3,12 @@ mosquitto_acl: |
   user hub
   topic     write     display/+/windspeed
   topic read          display/+/currentwindspeed
+  topic read          fbp
 
   user display
   topic read          display/+/windspeed
   topic     write     display/+/currentwindspeed
+  topic     write     fbp
 
 mosquitto_conf: |
   log_dest stdout

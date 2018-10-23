@@ -273,6 +273,7 @@ void reload_main(int argc, char *argv[], void **data, const int *changed) {
         const double font_size = 270.0;
         const double left = 160.0;
         const double top = 500.0;
+        const double width = 1010.0;
 
 #if 0
         // ff 00 37
@@ -293,7 +294,12 @@ void reload_main(int argc, char *argv[], void **data, const int *changed) {
         char str[100];
         std::sprintf(str, "%3.1f m/s", as->wind_speed);
 
-        cairo_move_to(cr, left, top);
+        cairo_text_extents_t extents;
+        cairo_text_extents(cr, str, &extents);
+
+        double x = left + width - extents.width - extents.x_bearing;
+
+        cairo_move_to(cr, x, top);
         cairo_show_text(cr, str);
       }
 

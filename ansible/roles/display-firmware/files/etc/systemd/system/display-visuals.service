@@ -1,6 +1,6 @@
 [Service]
-ExecStart=/opt/windmachine/venv/bin/python /opt/windmachine/firmware/wp_visuals/wp_visuals
-WorkingDirectory=/opt/windmachine/firmware
+ExecStart=/opt/windmachine/firmware/wp_visuals/wp_visuals
+WorkingDirectory=/opt/windmachine/firmware/wp_visuals
 Restart=always
 RestartSec=10
 User=display

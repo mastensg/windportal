@@ -6,7 +6,7 @@ AM_CXXFLAGS = -std=c++14 -Wall -Wextra -pedantic
 lib_LTLIBRARIES = \
 		  libplatform.la \
 		  libstbimage.la \
-		  libvisuals.la
+		  libwp_visuals.la
 
 bin_PROGRAMS = \
 	       wp_visuals \
@@ -29,24 +29,24 @@ libstbimage_la_SOURCES = \
 
 # visuals  #############################################################
 
-libvisuals_la_CXXFLAGS = \
-			 $(AM_CXXFLAGS) \
-			 $(PLATFORM_CFLAGS) \
-			 $(CAIRO_CFLAGS) \
-			 $(FREETYPE2_CFLAGS) \
-			 $(ZMQ_CFLAGS)
-libvisuals_la_SOURCES = \
-		     src/platform.h \
-		     src/visuals.cc \
-		     src/reload_main.h
+libwp_visuals_la_CXXFLAGS = \
+			    $(AM_CXXFLAGS) \
+			    $(PLATFORM_CFLAGS) \
+			    $(CAIRO_CFLAGS) \
+			    $(FREETYPE2_CFLAGS) \
+			    $(ZMQ_CFLAGS)
+libwp_visuals_la_SOURCES = \
+			   src/platform.h \
+			   src/visuals.cc \
+			   src/reload_main.h
 
-wp_visuals_CXXFLAGS = $(libvisuals_la_CXXFLAGS)
+wp_visuals_CXXFLAGS = $(libwp_visuals_la_CXXFLAGS)
 wp_visuals_LDADD = \
 	     $(CAIRO_LIBS) \
 	     $(FREETYPE2_LIBS) \
 	     $(ZMQ_LIBS) \
 	     libplatform.la \
-	     libvisuals.la
+	     libwp_visuals.la
 wp_visuals_SOURCES = \
 	       src/reload_main.h \
 	       src/run.cc
@@ -62,4 +62,4 @@ wp_visuals_reload_LDADD = \
 wp_visuals_reload_SOURCES = \
 		src/reload.cc \
 		src/reload_main.h
-EXTRA_wp_visuals_reload_DEPENDENCIES = libvisuals.la
+EXTRA_wp_visuals_reload_DEPENDENCIES = libwp_visuals.la

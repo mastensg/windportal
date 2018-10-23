@@ -133,7 +133,7 @@ void reload_main(int argc, char *argv[], void **data, const int *changed) {
       FT_Face ft_face;
       {
         const char *font_path =
-            "/home/mastensg/src/voxel/AccanthisADFStdNo3-Regular.otf";
+            "/home/mastensg/equinor_fonts/Equinor-Medium.otf";
         FT_Error ft_status = FT_New_Face(ft_library, font_path, 0, &ft_face);
         assert(0 == ft_status);
       }
@@ -163,8 +163,8 @@ void reload_main(int argc, char *argv[], void **data, const int *changed) {
 
   platform::reload_begin(p);
 
-  const int temp_width = 1920;
-  const int temp_height = 1080;
+  const int temp_width = 1280;
+  const int temp_height = 800;
   const int temp_channels = 3;
   uint8_t temp_image[temp_height * temp_width * temp_channels];
 
@@ -212,41 +212,44 @@ void reload_main(int argc, char *argv[], void **data, const int *changed) {
       }
 
       {
-        const char *topic = "potentiometer ";
+        const char *topic = "wind_speed ";
         if (0 == strncmp(topic, buf, strlen(topic))) {
           float value;
           sscanf(buf + strlen(topic), "%f", &value);
-          as->wind_speed = 40.0f * value;
+          as->wind_speed = value;
         }
       }
     }
 
-    if (true) {
+    {
       cairo_surface_t *surface = cairo_image_surface_create(
           CAIRO_FORMAT_ARGB32, temp_width, temp_height);
 
       cairo_t *cr = cairo_create(surface);
       cairo_surface_destroy(surface);
 
-      cairo_set_source_rgba(cr, 1.0, 1.0, 1.0, 1.0);
+      // background
+      // dd de e0
+      cairo_set_source_rgba(cr, 0.867, 0.871, 0.878, 1.0);
       cairo_rectangle(cr, 0.0, 0.0, temp_width, temp_height);
       cairo_fill(cr);
 
-      cairo_set_source_rgba(cr, 0.0, 0.0, 0.0, 1.0);
-
-      cairo_set_font_face(cr, as->cairo_font_face);
-
-      const double left = 400.0;
-      const double fs = 300.0;
-      const double margin = (temp_height - 3.0 * fs) / 4.5;
-      cairo_set_font_size(cr, fs);
-
+      // wind speed text
+      // ff 00 37
       {
-        char temp[100];
-        std::sprintf(temp, "%3.1f m/s", as->wind_speed);
+        const double font_size = 200.0;
+        const double left = 270.0;
+        const double top = 470.0;
 
-        cairo_move_to(cr, left, 1.0 * (margin + fs));
-        cairo_show_text(cr, temp);
+        cairo_set_source_rgba(cr, 1.0, 0.0, 0.216, 1.0);
+        cairo_set_font_face(cr, as->cairo_font_face);
+        cairo_set_font_size(cr, font_size);
+
+        char str[100];
+        std::sprintf(str, "%3.1f m/s", as->wind_speed);
+
+        cairo_move_to(cr, left, top);
+        cairo_show_text(cr, str);
       }
 
       pixels_of_surface(temp_image, surface, temp_width, temp_height);

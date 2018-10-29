@@ -23,6 +23,7 @@ class Inputs():
         perturbation_amplitude: float = 0.1,
         noise_period : int = 200,
         idle_scale : float = 0.2,
+        active_time : float = 5.0,
         
         time : float = 0.0):
 
@@ -34,6 +35,8 @@ class State():
   def __init__(self,
         fan_duty : float = 0.0,
 
+        user_button_on : bool = False,
+        active_mode_end : float = 0.0,
         perturbation : float = 0.0,
         next_perturbation_update : float = 0.0,
         noise = None,
@@ -58,9 +61,20 @@ def next_state(current : State, inputs: Inputs):
         state.perturbation = p
         state.next_perturbation_update = inputs.time + (inputs.perturbation_period/1000.0)
 
-    user_scale = 1.0 if inputs.user_button else inputs.idle_scale
+    # User button -> active mode
+    if inputs.user_button and (not current.user_button_on):
+        state.active_mode_end = inputs.time + inputs.active_time
 
-    state.fan_duty = (1 / 40) * user_scale * inputs.wind_speed * inputs.scale + state.perturbation
+    # Active mode end
+    is_active = current.active_mode_end is not None
+    if is_active and inputs.time >= current.active_mode_end:
+        state.active_mode_end = None
+
+    state.user_button_on = inputs.user_button
+
+    active_scale = 1.0 if is_active else inputs.idle_scale
+
+    state.fan_duty = (1 / 40) * inputs.wind_speed * active_scale * inputs.scale + state.perturbation
 
     return state
 

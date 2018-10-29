@@ -9,6 +9,7 @@
       with_items:
         - git
         - etckeeper
+        - screen
 
     - name: superuser nopasswd sudo
       copy:

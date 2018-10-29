@@ -9,6 +9,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <iterator>
+#include <random>
 #include <thread>
 #include <vector>
 
@@ -92,12 +93,22 @@ void pixels_of_surface(uint8_t *pixels, cairo_surface_t *surface, int width,
 
 //////////////////////////////////////////////////////////////////////////////
 
+static const double random_stddev = 0.2;
+static const double random_period = 1.5;
+
 struct AppState {
-  float wind_speed;
-  cairo_font_face_t *cairo_font_face;
-  void *zmq_ctx;
-  void *zmq_pub;
-  void *zmq_sub;
+  float wind_speed = 7.5f;
+
+  std::mt19937 random_generator{0};
+  std::normal_distribution<> random_distribution{0.0, random_stddev};
+  float random_term = 0.0f;
+  double random_updated_at = 0.0;
+
+  cairo_font_face_t *cairo_font_face = nullptr;
+
+  void *zmq_ctx = nullptr;
+  void *zmq_pub = nullptr;
+  void *zmq_sub = nullptr;
 };
 
 struct Session {
@@ -119,8 +130,6 @@ void reload_main(int argc, char *argv[], void **data, const int *changed) {
     platform::reload_init(&the_session->platform);
 
     AppState *as = &the_session->as;
-
-    as->wind_speed = 0.0f;
 
     // font
     char *wp_font_path = getenv("WP_FONT_PATH");
@@ -185,6 +194,18 @@ void reload_main(int argc, char *argv[], void **data, const int *changed) {
 
   for (;;) {
     platform::frame_begin(p);
+
+    // random wind speed
+    {
+      double now = platform::time(p);
+
+      if (as->random_updated_at + random_period < now) {
+        double r = as->random_distribution(as->random_generator);
+
+        as->random_term = r;
+        as->random_updated_at = now;
+      }
+    }
 
     for (auto &e : p->events) {
 #pragma GCC diagnostic push
@@ -265,8 +286,13 @@ void reload_main(int argc, char *argv[], void **data, const int *changed) {
         cairo_set_font_face(cr, as->cairo_font_face);
         cairo_set_font_size(cr, font_size);
 
+        float wind_speed = as->wind_speed + as->random_term;
+        if (wind_speed < 0.0f) {
+          wind_speed = 0.0f;
+        }
+
         char str[100];
-        std::sprintf(str, "%3.1f m/s", as->wind_speed);
+        std::sprintf(str, "%3.1f m/s", wind_speed);
 
         cairo_text_extents_t extents;
         cairo_text_extents(cr, str, &extents);

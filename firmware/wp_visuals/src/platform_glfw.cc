@@ -172,7 +172,7 @@ void reload_init(Platform *p) {
   // glfwWindowHint(GLFW_SRGB_CAPABLE, 0);
 
   p->viewport_size = sl::ivec2{666, 373};
-  p->internal->window = glfwCreateWindow(666, 373, "hello", nullptr, nullptr);
+  p->internal->window = glfwCreateWindow(1280, 800, "hello", nullptr, nullptr);
   if (nullptr == p->internal->window) {
     glfwTerminate();
     errx(EXIT_FAILURE, "cannot create window");

@@ -93,6 +93,46 @@ void pixels_of_surface(uint8_t *pixels, cairo_surface_t *surface, int width,
 
 //////////////////////////////////////////////////////////////////////////////
 
+static const char *name_of_speed(float speed) {
+  if (speed < 0.3) {
+    return "Stille";
+  }
+  if (speed < 1.6) {
+    return "Flau vind";
+  }
+  if (speed < 3.4) {
+    return "Svak vind";
+  }
+  if (speed < 5.5) {
+    return "Lett bris";
+  }
+  if (speed < 8.0) {
+    return "Laber bris";
+  }
+  if (speed < 10.8) {
+    return "Frisk bris";
+  }
+  if (speed < 13.9) {
+    return "Liten kuling";
+  }
+  if (speed < 17.2) {
+    return "Stiv kuling";
+  }
+  if (speed < 20.8) {
+    return "Sterk kuling";
+  }
+  if (speed < 24.5) {
+    return "Liten storm";
+  }
+  if (speed < 28.5) {
+    return "Full storm";
+  }
+  if (speed < 32.7) {
+    return "Sterk storm";
+  }
+  return "Orkan";
+}
+
 static const double random_stddev = 0.2;
 static const double random_period = 1.5;
 
@@ -263,25 +303,14 @@ void reload_main(int argc, char *argv[], void **data, const int *changed) {
       cairo_rectangle(cr, 0.0, 0.0, temp_width, temp_height);
       cairo_fill(cr);
 
-      // wind speed text
+      // wind speed number
       {
         const double font_size = 270.0;
-        const double left = 160.0;
-        const double top = 490.0;
-        const double width = 1010.0;
+        const double right = 50.0;
+        const double top = 420.0;
 
-#if 0
-        // ff 00 37
-        cairo_set_source_rgba(cr, 1.0, 0.0, 0.216, 1.0);
-#endif
-#if 0
-        // e8 36 43
-        cairo_set_source_rgba(cr, 0.910, 0.212, 0.263, 1.0);
-#endif
-#if 1
         // 38 38 38
         cairo_set_source_rgba(cr, 0.220, 0.220, 0.220, 1.0);
-#endif
 
         cairo_set_font_face(cr, as->cairo_font_face);
         cairo_set_font_size(cr, font_size);
@@ -297,7 +326,35 @@ void reload_main(int argc, char *argv[], void **data, const int *changed) {
         cairo_text_extents_t extents;
         cairo_text_extents(cr, str, &extents);
 
-        double x = left + width - extents.width - extents.x_bearing;
+        double x = 1280.0 - right - extents.width - extents.x_bearing;
+
+        cairo_move_to(cr, x, top);
+        cairo_show_text(cr, str);
+      }
+
+      // wind speed name
+      {
+        const double font_size = 100.0;
+        const double left = 0.5 * 1280.0;
+        const double top = 600.0;
+
+        // 38 38 38
+        cairo_set_source_rgba(cr, 0.220, 0.220, 0.220, 1.0);
+
+        cairo_set_font_face(cr, as->cairo_font_face);
+        cairo_set_font_size(cr, font_size);
+
+        float wind_speed = as->wind_speed + as->random_term;
+        if (wind_speed < 0.0f) {
+          wind_speed = 0.0f;
+        }
+
+        const char *str = name_of_speed(as->wind_speed);
+
+        cairo_text_extents_t extents;
+        cairo_text_extents(cr, str, &extents);
+
+        double x = left - 0.5 * extents.width - extents.x_bearing;
 
         cairo_move_to(cr, x, top);
         cairo_show_text(cr, str);

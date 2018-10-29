@@ -98,33 +98,34 @@ Milestone C: I/O complete, from RPi (M)
 - [x] Set fan power
 - [x] Show text on display
 
-## Assembly, Friday Oct 26
-
-Electronics
-
-- [ ] Buy power supplies. 5V + 12V
-- [ ] Buy enclosure(s) PSU
-- [ ] Buy Wago connectors
-- [ ] Use cable glands on wires
-
-User button
-
-- [ ] Test user button input
-- [ ] Firmata: get user button status (turn on)
-- [ ] Scale gusts based on user input
-
-Display
-
-- [ ] Hide startup rainbow, linux messages from screen
-- [ ] Hide low-power symbol
-- [ ] Add a small variation to shown windspeed
-
 Server datafetching
 
 - [x] Define MQTT interface (J)
 - [x] Server fetches data using YR (J) 3
 - [x] Fetch data using scraped HTML page (J) 3
-- [ ] Deploy data fetcher to hub
+- [x] Deploy data fetcher to hub
+
+## Assembly, Friday Oct 26
+
+Electronics
+
+- [x] Buy power supplies. 5V + 12V
+- [x] Buy enclosure(s) PSU
+- [x] Buy Wago connectors
+- [x] Use cable glands on wires
+
+User button
+
+- [x] Test user button input
+- [x] Firmata: get user button status (turn on)
+- [x] Scale gusts based on user input
+
+Display
+
+- [ ] Add wind description label "frisk bris" under windspeed
+- [ ] Hide startup rainbow, linux messages from screen
+- [ ] Hide low-power symbol
+- [ ] Add a small variation to shown windspeed
 
 Monitoring
 
@@ -134,12 +135,12 @@ Monitoring
 
 System complete checklist
 
-- [ ] Monitoring exists
 - [ ] Windgust animation works
+- [ ] Monitoring exists
 - [ ] Tested device poweroffs
 - [ ] Tested device disconnect/reconnect
-- [ ] Tested server downtime
-- [ ] Tested full gust button
+- [ ] Tested server downtime, recovers automatically
+- [ ] Tested windpower override switch
 
 ## Failure modes
 

@@ -16,11 +16,13 @@ class Inputs():
         # Actual inputs
         wind_speed  : float = 0.0,
         scale : float = 1.0,
+        user_button: bool = False,
 
         # Parameters
         perturbation_period : float = 1000.0, # milliseconds
         perturbation_amplitude: float = 0.1,
         noise_period : int = 200,
+        idle_scale : float = 0.2,
         
         time : float = 0.0):
 
@@ -56,7 +58,9 @@ def next_state(current : State, inputs: Inputs):
         state.perturbation = p
         state.next_perturbation_update = inputs.time + (inputs.perturbation_period/1000.0)
 
-    state.fan_duty = (1 / 40) * inputs.wind_speed * inputs.scale + state.perturbation
+    user_scale = 1.0 if inputs.user_button else inputs.idle_scale
+
+    state.fan_duty = (1 / 40) * user_scale * inputs.wind_speed * inputs.scale + state.perturbation
 
     return state
 
@@ -65,6 +69,8 @@ def update_inputs_ipc(inputs, ipc_session):
     for topic, value in published_values.items():
         if "potentiometer" == topic:
             inputs.__dict__['scale'] = value
+        if "button" == topic:
+            inputs.__dict__['user_button'] = value
         if "wind_speed" == topic:
             inputs.__dict__['wind_speed'] = value
 

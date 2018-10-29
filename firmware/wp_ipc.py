@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 
+import sys
 import json
 
 import zmq
+import gevent
 
 PUB_URL = "ipc:///tmp/wp_pub"
 SUB_URL = "ipc:///tmp/wp_sub"
@@ -45,10 +47,26 @@ def main():
     """
     s = Session()
 
-    while True:
-        r = s.recv()
-        if {} != r:
-            print(r)
+    args = sys.argv[1:]
+
+    send_message = False
+    if len(args) == 2:
+        send_message = True
+        key, value = args
+
+    if send_message:
+        gevent.sleep(0.5) # make sure Session is up
+        print('sending {}={}'.format(key, value))
+        s.send(key, float(value))
+        r = s.recv(timeout_ms=500)
+        gevent.sleep(0.5)
+
+    else:
+        print('listening for messages')
+        while True:
+            r = session.recv()
+            if {} != r:
+                print(r)
 
 
 if __name__ == "__main__":

@@ -1,2 +1,2 @@
-ssh_call_home_host: hub.wind.mastensg.net
+ssh_call_home_host: windportal.dept.no
 ssh_call_home_user: ssh-call-home

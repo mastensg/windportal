@@ -4,7 +4,7 @@ hub
 initial run as root:
 
     # add hub's host key to known_hosts
-    ssh root@hub.wind.mastensg.net true
+    ssh root@windportal.dept.no true
 
     ansible-playbook hub.yml -k -u root
 

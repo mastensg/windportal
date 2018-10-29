@@ -306,7 +306,7 @@ void reload_main(int argc, char *argv[], void **data, const int *changed) {
       // wind speed number
       {
         const double font_size = 270.0;
-        const double right = 50.0;
+        const double right = 150.0;
         const double top = 420.0;
 
         // 38 38 38

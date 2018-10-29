@@ -64,7 +64,7 @@ def main():
     else:
         print('listening for messages')
         while True:
-            r = session.recv()
+            r = s.recv()
             if {} != r:
                 print(r)
 

@@ -113,6 +113,8 @@ Electronics
 - [x] Buy enclosure(s) PSU
 - [x] Buy Wago connectors
 - [x] Use cable glands on wires
+- [x] Add USB powered hub
+- [ ] Solder the serial console connection
 
 User button
 
@@ -123,13 +125,15 @@ User button
 Display
 
 - [ ] Add wind description label "frisk bris" under windspeed
+- [ ] Add a small variation to shown windspeed
 - [ ] Hide startup rainbow, linux messages from screen
 - [ ] Hide low-power symbol
-- [ ] Add a small variation to shown windspeed
 
 Monitoring
 
 - [ ] Turn status LEDs in panel on/off
+- [ ] Log 4G status. Signal strength, network type, connected/not
+- [ ] Log undervoltage condition. Ideally voltage level, or just dmesg warnings
 - [ ] Device reports heartbeat to server on MQTT (`fbp`)
 - [ ] Server stores heartbeat events
 

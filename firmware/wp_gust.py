@@ -24,6 +24,7 @@ class Inputs():
         noise_period : int = 200,
         idle_speed : float = 2.0, # meters/second
         active_time : float = 5.0,
+        min_windspeed : float = 4.0,
         
         time : float = 0.0):
 
@@ -60,7 +61,7 @@ def next_state(current : State, inputs: Inputs):
         state.next_perturbation_update = inputs.time + (inputs.perturbation_period/1000.0)
 
     # User button -> active mode
-    if inputs.user_button and (not current.user_button_on):
+    if inputs.user_button:
         state.active_mode_end = inputs.time + inputs.active_time
 
     # Active mode end
@@ -73,6 +74,8 @@ def next_state(current : State, inputs: Inputs):
     wind_speed = inputs.wind_speed if is_active else inputs.idle_speed
 
     speed_with_gusts = (wind_speed * state.perturbation)
+    speed_with_gusts = max(inputs.min_windspeed, speed_with_gusts) # ensure fan turns on for low speeds
+
     state.fan_duty = (1 / 40) * speed_with_gusts * inputs.scale
 
     return state

@@ -20,11 +20,11 @@ class Inputs():
 
         # Parameters
         perturbation_period : float = 1000.0, # milliseconds
-        gust_factor_stddev: float = 0.05, # ratio
+        gust_factor_stddev: float = 0.10, # ratio
         noise_period : int = 200,
-        idle_speed : float = 2.0, # meters/second
-        active_time : float = 5.0,
-        min_windspeed : float = 4.0,
+        idle_speed : float = 2.5, # meters/second
+        active_time : float = 10.0,
+        min_windspeed : float = 2.5,
         
         time : float = 0.0):
 

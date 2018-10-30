@@ -1,0 +1,16 @@
+---
+- name: display_boot_config
+  tags: display_boot_config
+  become: yes
+  block:
+    - name: Disable boot rainbow
+      lineinfile:
+        dest: /boot/config.txt
+        line: "disable_splash=1"
+        regexp: "^disable_splash="
+
+    - name: Disable graphical warnings
+      lineinfile:
+        dest: /boot/config.txt
+        line: "avoid_warnings=1"
+        regexp: "^avoid_warnings="

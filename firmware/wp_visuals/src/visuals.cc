@@ -295,22 +295,27 @@ void reload_main(int argc, char *argv[], void **data, const int *changed) {
 #if 0
       // dd de e0
       cairo_set_source_rgba(cr, 0.867, 0.871, 0.878, 1.0);
-#else
+#endif
+#if 0
       const double bgl = 0.85;
       cairo_set_source_rgba(cr, bgl * 0.867, bgl * 0.871, bgl * 0.878, 1.0);
+#endif
+#if 1
+      cairo_set_source_rgba(cr, 1.0, 1.0, 1.0, 1.0);
 #endif
 
       cairo_rectangle(cr, 0.0, 0.0, temp_width, temp_height);
       cairo_fill(cr);
+
+      // cairo_set_source_rgba(cr, 0.220, 0.220, 0.220, 1.0);
+      // cairo_set_source_rgba(cr, 1.0, 0.0, 0.216, 1.0);
+      cairo_set_source_rgba(cr, 0.910, 0.212, 0.263, 1.0);
 
       // wind speed number
       {
         const double font_size = 270.0;
         const double right = 150.0;
         const double top = 420.0;
-
-        // 38 38 38
-        cairo_set_source_rgba(cr, 0.220, 0.220, 0.220, 1.0);
 
         cairo_set_font_face(cr, as->cairo_font_face);
         cairo_set_font_size(cr, font_size);
@@ -337,9 +342,6 @@ void reload_main(int argc, char *argv[], void **data, const int *changed) {
         const double font_size = 100.0;
         const double left = 0.5 * 1280.0;
         const double top = 600.0;
-
-        // 38 38 38
-        cairo_set_source_rgba(cr, 0.220, 0.220, 0.220, 1.0);
 
         cairo_set_font_face(cr, as->cairo_font_face);
         cairo_set_font_size(cr, font_size);

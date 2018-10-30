@@ -137,7 +137,7 @@ static const double random_stddev = 0.2;
 static const double random_period = 1.5;
 
 struct AppState {
-  float wind_speed = 7.5f;
+  float wind_speed = 0.0f;
 
   std::mt19937 random_generator{0};
   std::normal_distribution<> random_distribution{0.0, random_stddev};
@@ -277,8 +277,9 @@ void reload_main(int argc, char *argv[], void **data, const int *changed) {
         const char *topic = "wind_speed ";
         if (0 == strncmp(topic, buf, strlen(topic))) {
           float value;
-          sscanf(buf + strlen(topic), "%f", &value);
-          as->wind_speed = value;
+          if (1 == sscanf(buf + strlen(topic), "%f", &value)) {
+            as->wind_speed = value;
+          }
         }
       }
     }

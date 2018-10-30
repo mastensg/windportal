@@ -20,9 +20,9 @@ class Inputs():
 
         # Parameters
         perturbation_period : float = 1000.0, # milliseconds
-        perturbation_amplitude: float = 0.1,
+        gust_factor_stddev: float = 0.05, # ratio
         noise_period : int = 200,
-        idle_scale : float = 0.2,
+        idle_speed : float = 2.0, # meters/second
         active_time : float = 5.0,
         
         time : float = 0.0):
@@ -51,14 +51,12 @@ def next_state(current : State, inputs: Inputs):
     state = copy.copy(current)
 
     if state.noise is None:
-        state.noise = [ random.normalvariate(0.0, 1.0) for _ in range(inputs.noise_period) ]
+        state.noise = [ random.normalvariate(1.0, inputs.gust_factor_stddev) for _ in range(inputs.noise_period) ]
 
     if inputs.time >= current.next_perturbation_update:
-        n = state.noise[state.noise_phase]
-        p = inputs.perturbation_amplitude * n
+        state.perturbation = state.noise[state.noise_phase]
 
         state.noise_phase = state.noise_phase + 1 if state.noise_phase < inputs.noise_period - 1 else 0
-        state.perturbation = p
         state.next_perturbation_update = inputs.time + (inputs.perturbation_period/1000.0)
 
     # User button -> active mode
@@ -72,9 +70,10 @@ def next_state(current : State, inputs: Inputs):
 
     state.user_button_on = inputs.user_button
 
-    active_scale = 1.0 if is_active else inputs.idle_scale
+    wind_speed = inputs.wind_speed if is_active else inputs.idle_speed
 
-    state.fan_duty = (1 / 40) * inputs.wind_speed * active_scale * inputs.scale + state.perturbation
+    speed_with_gusts = (wind_speed * state.perturbation)
+    state.fan_duty = (1 / 40) * speed_with_gusts * inputs.scale
 
     return state
 

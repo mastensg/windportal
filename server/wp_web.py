@@ -130,8 +130,7 @@ def setup_app(broker_url, check_interval=30*60, done_cb=None):
         log.info('Fetching new wind data')
         nonlocal wind_speed
         wind_speed = windspeed_ukenergy()
-        # FIXME: set persistent flag
-        mqtt_client.publish('display/display0/windspeed', wind_speed)
+        mqtt_client.publish('display/display0/windspeed', wind_speed, retain=True)
         log.info('New windspeed is {}'.format(wind_speed))
 
     def fetcher():

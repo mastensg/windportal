@@ -111,6 +111,7 @@ def main():
         del s['noise']
         print('i', inputs.__dict__)
         print('s', s)
+        sys.stdout.flush()
 
         set_outputs_ipc(ipc_session, state)
 

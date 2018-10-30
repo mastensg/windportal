@@ -92,6 +92,7 @@ def update_inputs_ipc(inputs, ipc_session):
 
 def set_outputs_ipc(ipc_session, state):
     ipc_session.send("fan_duty", state.fan_duty)
+    ipc_session.send("is_active", state.active_mode_end is not None)
 
 
 def main():

@@ -114,7 +114,7 @@ Electronics
 - [x] Buy Wago connectors
 - [x] Use cable glands on wires
 - [x] Add USB powered hub
-- [ ] Solder the serial console connection
+- [x] Solder the serial console connection
 
 User button
 
@@ -124,10 +124,18 @@ User button
 
 Display
 
-- [ ] Add wind description label "frisk bris" under windspeed
-- [ ] Add a small variation to shown windspeed
+- [x] Add wind description label "frisk bris" under windspeed
+- [x] Add a small variation to shown windspeed
 - [ ] Hide startup rainbow, linux messages from screen
 - [ ] Hide low-power symbol
+
+## Tuneup
+
+Bugs
+
+- [ ] Firmata process sometimes hangs.
+Possibly due to blocking write() call if discovery is not successful.
+Use systemd watchdog to make sure it restarts. https://stackoverflow.com/a/37111518/1967571
 
 Monitoring
 

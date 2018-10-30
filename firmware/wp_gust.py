@@ -76,7 +76,7 @@ def next_state(current : State, inputs: Inputs):
     speed_with_gusts = (wind_speed * state.perturbation)
     speed_with_gusts = max(inputs.min_windspeed, speed_with_gusts) # ensure fan turns on for low speeds
 
-    state.fan_duty = (1 / 40) * speed_with_gusts * inputs.scale
+    state.fan_duty = (1 / 25) * speed_with_gusts * inputs.scale
 
     return state
 

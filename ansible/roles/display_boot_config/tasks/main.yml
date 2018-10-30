@@ -14,3 +14,15 @@
         dest: /boot/config.txt
         line: "avoid_warnings=1"
         regexp: "^avoid_warnings="
+
+    - name: Disable linux console on tty1
+      replace:
+        dest: /boot/cmdline.txt
+        replace: ""
+        regexp: "console=tty1 "
+
+    - name: Disable linux graphics
+      replace:
+        dest: /boot/cmdline.txt
+        replace: "rootwait logo.nologo vt.global_cursor_default=0 splash"
+        regexp: "rootwait(.*)$"

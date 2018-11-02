@@ -66,7 +66,7 @@ def main():
         while True:
             r = s.recv()
             if {} != r:
-                print(r)
+                print(r, flush=True)
 
 
 if __name__ == "__main__":

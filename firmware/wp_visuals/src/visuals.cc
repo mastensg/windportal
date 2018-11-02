@@ -29,7 +29,7 @@
 #include "reload_main.h"
 #include "sl.h"
 
-namespace temp {
+namespace canvas {
 static const std::vector<float> vertices = {
     -1.0f, -1.0f, +0.0f, +1.0f,  // A
     +1.0f, -1.0f, +1.0f, +1.0f,  // B
@@ -68,12 +68,14 @@ static const std::vector<gl::AttributeDescriptor> attributes = {
     {"a_position", /**/ 2, GL_FLOAT, stride, gl::offset_float(0)},
     {"a_texpos", /*  */ 2, GL_FLOAT, stride, gl::offset_float(2)},
 };
-}  // namespace temp
+}  // namespace canvas
 
 //////////////////////////////////////////////////////////////////////////////
 
 void pixels_of_surface(uint8_t *pixels, cairo_surface_t *surface, int width,
                        int height) {
+  const int channels = 4;
+
   cairo_surface_flush(surface);
 
   uint8_t *data = cairo_image_surface_get_data(surface);
@@ -81,12 +83,13 @@ void pixels_of_surface(uint8_t *pixels, cairo_surface_t *surface, int width,
 
   for (int y = 0; y < height; y++) {
     for (int x = 0; x < width; x++) {
-      int p = width * 3 * y + 3 * x + 0;
-      int d = stride * y + 4 * x + 0;
+      int p = width * channels * y + channels * x + 0;
+      int d = stride * y + channels * x + 0;
 
       pixels[p + 0] = data[d + 2];
       pixels[p + 1] = data[d + 1];
       pixels[p + 2] = data[d + 0];
+      pixels[p + 3] = data[d + 3];
     }
   }
 }
@@ -136,8 +139,15 @@ static const char *name_of_speed(float speed) {
 static const double random_stddev = 0.2;
 static const double random_period = 1.5;
 
+static const int canvas_width = 1280;
+static const int canvas_height = 800;
+static const int canvas_channels = 4;
+static const size_t canvas_size =
+    canvas_height * canvas_width * canvas_channels;
+
 struct AppState {
   float wind_speed = 0.0f;
+  bool is_active = false;
 
   std::mt19937 random_generator{0};
   std::normal_distribution<> random_distribution{0.0, random_stddev};
@@ -149,6 +159,9 @@ struct AppState {
   void *zmq_ctx = nullptr;
   void *zmq_pub = nullptr;
   void *zmq_sub = nullptr;
+
+  gl::Texture active_texture = {};
+  gl::Texture idle_texture = {};
 };
 
 struct Session {
@@ -157,6 +170,150 @@ struct Session {
 };
 
 static Session *the_session;
+
+static void receive_and_update(AppState *as) {
+  for (;;) {
+    char buf[1024];
+
+    int numbytes = zmq_recv(as->zmq_sub, buf, sizeof(buf), ZMQ_DONTWAIT);
+    if (-1 == numbytes) {
+      break;
+    }
+
+    buf[numbytes] = '\0';
+
+    {
+      const char *topic = "wind_speed ";
+      if (0 == strncmp(topic, buf, strlen(topic))) {
+        float value;
+        if (1 == sscanf(buf + strlen(topic), "%f", &value)) {
+          as->wind_speed = value;
+        }
+      }
+    }
+
+    {
+      const char *topic = "is_active ";
+      if (0 == strncmp(topic, buf, strlen(topic))) {
+        {
+          const char *value = "true";
+          if (0 == strncmp(value, buf + strlen(topic), strlen(value))) {
+            as->is_active = true;
+          }
+        }
+
+        {
+          const char *value = "false";
+          if (0 == strncmp(value, buf + strlen(topic), strlen(value))) {
+            as->is_active = false;
+          }
+        }
+      }
+    }
+  }
+}
+
+static void render_active(AppState *as) {
+  cairo_surface_t *surface = cairo_image_surface_create(
+      CAIRO_FORMAT_ARGB32, canvas_width, canvas_height);
+
+  cairo_t *cr = cairo_create(surface);
+  cairo_surface_destroy(surface);
+
+  // background
+
+  cairo_set_source_rgba(cr, 1.0, 1.0, 1.0, 1.0);
+
+  cairo_rectangle(cr, 0.0, 0.0, canvas_width, canvas_height);
+  cairo_fill(cr);
+
+  // cairo_set_source_rgba(cr, 0.220, 0.220, 0.220, 1.0);
+  // cairo_set_source_rgba(cr, 1.0, 0.0, 0.216, 1.0);
+  // cairo_set_source_rgba(cr, 0.910, 0.212, 0.263, 1.0);
+  cairo_set_source_rgba(cr, 0.933, 0.173, 0.325, 1.0);  // ee 2c 53
+
+  // wind speed number
+  {
+    const double font_size = 270.0;
+    const double right = 150.0;
+    const double top = 420.0;
+
+    cairo_set_font_face(cr, as->cairo_font_face);
+    cairo_set_font_size(cr, font_size);
+
+    float wind_speed = as->wind_speed + as->random_term;
+    if (wind_speed < 0.0f) {
+      wind_speed = 0.0f;
+    }
+
+    char str[100];
+    std::sprintf(str, "%3.1f m/s", wind_speed);
+
+    cairo_text_extents_t extents;
+    cairo_text_extents(cr, str, &extents);
+
+    double x = 1280.0 - right - extents.width - extents.x_bearing;
+
+    cairo_move_to(cr, x, top);
+    cairo_show_text(cr, str);
+  }
+
+  // wind speed name
+  {
+    const double font_size = 100.0;
+    const double left = 0.5 * 1280.0;
+    const double top = 600.0;
+
+    cairo_set_font_face(cr, as->cairo_font_face);
+    cairo_set_font_size(cr, font_size);
+
+    float wind_speed = as->wind_speed + as->random_term;
+    if (wind_speed < 0.0f) {
+      wind_speed = 0.0f;
+    }
+
+    const char *str = name_of_speed(as->wind_speed);
+
+    cairo_text_extents_t extents;
+    cairo_text_extents(cr, str, &extents);
+
+    double x = left - 0.5 * extents.width - extents.x_bearing;
+
+    cairo_move_to(cr, x, top);
+    cairo_show_text(cr, str);
+  }
+
+  std::array<uint8_t, canvas_size> pixels;
+  pixels_of_surface(pixels.data(), surface, canvas_width, canvas_height);
+
+  cairo_destroy(cr);
+
+  glBindTexture(GL_TEXTURE_2D, as->active_texture);
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, canvas_width, canvas_height, 0,
+               GL_RGBA, GL_UNSIGNED_BYTE, pixels.data());
+}
+
+static void render_idle(AppState *as) {
+  cairo_surface_t *surface = cairo_image_surface_create(
+      CAIRO_FORMAT_ARGB32, canvas_width, canvas_height);
+
+  cairo_t *cr = cairo_create(surface);
+  cairo_surface_destroy(surface);
+
+  const char *image_path = "./idle.png";
+  cairo_surface_t *image = cairo_image_surface_create_from_png(image_path);
+  cairo_set_source_surface(cr, image, 0.0, 0.0);
+  cairo_paint(cr);
+
+  std::array<uint8_t, canvas_size> pixels;
+  pixels_of_surface(pixels.data(), surface, canvas_width, canvas_height);
+
+  cairo_destroy(cr);
+
+  glBindTexture(GL_TEXTURE_2D, as->idle_texture);
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, canvas_width, canvas_height, 0,
+               GL_RGBA, GL_UNSIGNED_BYTE, pixels.data());
+}
 
 void reload_main(int argc, char *argv[], void **data, const int *changed) {
   (void)argc;
@@ -213,24 +370,16 @@ void reload_main(int argc, char *argv[], void **data, const int *changed) {
 
   platform::reload_begin(p);
 
-  const int temp_width = 1280;
-  const int temp_height = 800;
-  const int temp_channels = 3;
-  uint8_t temp_image[temp_height * temp_width * temp_channels];
+  as->active_texture = gl::make_texture_2d(GL_LINEAR, GL_LINEAR,
+                                           GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE);
 
-  auto temp_texture = gl::make_texture_2d(GL_LINEAR, GL_LINEAR,
-                                          GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE);
+  as->idle_texture = gl::make_texture_2d(GL_LINEAR, GL_LINEAR, GL_CLAMP_TO_EDGE,
+                                         GL_CLAMP_TO_EDGE);
 
-  float temp_vertices[] = {
-      -1.0f, -1.0f, +0.0f, +1.0f,  // A
-      +1.0f, -1.0f, +1.0f, +1.0f,  // B
-      +1.0f, +1.0f, +1.0f, +0.0f,  // C
-      -1.0f, -1.0f, +0.0f, +1.0f,  // A
-      +1.0f, +1.0f, +1.0f, +0.0f,  // C
-      -1.0f, +1.0f, +0.0f, +0.0f,  // D
-  };
-  auto temp_buffer = gl::make_buffer(temp::vertices);
-  auto temp_program = gl::make_program(temp::vs, temp::fs);
+  render_idle(as);
+
+  auto canvas_buffer = gl::make_buffer(canvas::vertices);
+  auto canvas_program = gl::make_program(canvas::vs, canvas::fs);
 
   for (;;) {
     platform::frame_begin(p);
@@ -265,127 +414,26 @@ void reload_main(int argc, char *argv[], void **data, const int *changed) {
     }
     // double platform_time = platform::time(p);
 
-    for (;;) {
-      char buf[1024];
+    receive_and_update(as);
 
-      int numbytes = zmq_recv(as->zmq_sub, buf, sizeof(buf), ZMQ_DONTWAIT);
-      if (-1 == numbytes) {
-        break;
-      }
-
-      buf[numbytes] = '\0';
-
-      {
-        const char *topic = "wind_speed ";
-        if (0 == strncmp(topic, buf, strlen(topic))) {
-          float value;
-          if (1 == sscanf(buf + strlen(topic), "%f", &value)) {
-            as->wind_speed = value;
-          }
-        }
-      }
-    }
-
-    {
-      cairo_surface_t *surface = cairo_image_surface_create(
-          CAIRO_FORMAT_ARGB32, temp_width, temp_height);
-
-      cairo_t *cr = cairo_create(surface);
-      cairo_surface_destroy(surface);
-
-      // background
-
-#if 0
-      // dd de e0
-      cairo_set_source_rgba(cr, 0.867, 0.871, 0.878, 1.0);
-#endif
-#if 0
-      const double bgl = 0.85;
-      cairo_set_source_rgba(cr, bgl * 0.867, bgl * 0.871, bgl * 0.878, 1.0);
-#endif
-#if 1
-      cairo_set_source_rgba(cr, 1.0, 1.0, 1.0, 1.0);
-#endif
-
-      cairo_rectangle(cr, 0.0, 0.0, temp_width, temp_height);
-      cairo_fill(cr);
-
-      // cairo_set_source_rgba(cr, 0.220, 0.220, 0.220, 1.0);
-      // cairo_set_source_rgba(cr, 1.0, 0.0, 0.216, 1.0);
-      cairo_set_source_rgba(cr, 0.910, 0.212, 0.263, 1.0);
-
-      // wind speed number
-      {
-        const double font_size = 270.0;
-        const double right = 150.0;
-        const double top = 420.0;
-
-        cairo_set_font_face(cr, as->cairo_font_face);
-        cairo_set_font_size(cr, font_size);
-
-        float wind_speed = as->wind_speed + as->random_term;
-        if (wind_speed < 0.0f) {
-          wind_speed = 0.0f;
-        }
-
-        char str[100];
-        std::sprintf(str, "%3.1f m/s", wind_speed);
-
-        cairo_text_extents_t extents;
-        cairo_text_extents(cr, str, &extents);
-
-        double x = 1280.0 - right - extents.width - extents.x_bearing;
-
-        cairo_move_to(cr, x, top);
-        cairo_show_text(cr, str);
-      }
-
-      // wind speed name
-      {
-        const double font_size = 100.0;
-        const double left = 0.5 * 1280.0;
-        const double top = 600.0;
-
-        cairo_set_font_face(cr, as->cairo_font_face);
-        cairo_set_font_size(cr, font_size);
-
-        float wind_speed = as->wind_speed + as->random_term;
-        if (wind_speed < 0.0f) {
-          wind_speed = 0.0f;
-        }
-
-        const char *str = name_of_speed(as->wind_speed);
-
-        cairo_text_extents_t extents;
-        cairo_text_extents(cr, str, &extents);
-
-        double x = left - 0.5 * extents.width - extents.x_bearing;
-
-        cairo_move_to(cr, x, top);
-        cairo_show_text(cr, str);
-      }
-
-      pixels_of_surface(temp_image, surface, temp_width, temp_height);
-
-      cairo_destroy(cr);
-
-      glBindTexture(GL_TEXTURE_2D, temp_texture);
-      glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, temp_width, temp_height, 0, GL_RGB,
-                   GL_UNSIGNED_BYTE, temp_image);
-    }
+    render_active(as);
 
     glDisable(GL_SCISSOR_TEST);
     glDisable(GL_CULL_FACE);
 
-    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
-    glUseProgram(temp_program);
-    gl::enable(temp_buffer, temp_program, temp::attributes);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(temp_vertices), temp_vertices,
-                 GL_STATIC_DRAW);
-    glBindTexture(GL_TEXTURE_2D, temp_texture);
-    glDrawArrays(GL_TRIANGLES, 0, 6);
+    glUseProgram(canvas_program);
+    gl::enable(canvas_buffer, canvas_program, canvas::attributes);
+
+    if (as->is_active) {
+      glBindTexture(GL_TEXTURE_2D, as->active_texture);
+      glDrawArrays(GL_TRIANGLES, 0, 6);
+    } else {
+      glBindTexture(GL_TEXTURE_2D, as->idle_texture);
+      glDrawArrays(GL_TRIANGLES, 0, 6);
+    }
 
     ///////////////////////////////////////////////////////////
 

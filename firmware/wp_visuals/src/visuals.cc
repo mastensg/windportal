@@ -273,6 +273,8 @@ void reload_main(int argc, char *argv[], void **data, const int *changed) {
         break;
       }
 
+      buf[numbytes] = '\0';
+
       {
         const char *topic = "wind_speed ";
         if (0 == strncmp(topic, buf, strlen(topic))) {

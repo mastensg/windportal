@@ -33,8 +33,9 @@ class Session:
                 break
 
             if self.sub in socks:
-                topic, message = self.sub.recv_string().split()
-                values[topic] = json.loads(message)
+                message = self.sub.recv_string()
+                topic, value = message.split()
+                values[topic] = json.loads(value)
 
         return values
 

@@ -27,7 +27,7 @@ modem_link_is_up() {
 }
 
 hub_is_connected() {
-    systemctl is-active --quiet ssh-call-home
+    ping -c 1 -w 1 windportal.dept.no >/dev/null
 }
 
 all_services_are_running() {
@@ -92,13 +92,13 @@ output_led() {
     # G6    All services running
 
     case "${status_name}" in
-        ("arduino_is_attached")
+        ("modem_is_attached")
             local led_pin="10"
             ;;
-        ("modem_is_attached")
+        ("modem_link_is_up")
             local led_pin="9"
             ;;
-        ("modem_link_is_up")
+        ("arduino_is_attached")
             local led_pin="11"
             ;;
         ("hub_is_connected")
@@ -134,9 +134,9 @@ main() {
     local output=${1:-text}
 
     for status_name in \
-        arduino_is_attached \
         modem_is_attached \
         modem_link_is_up \
+        arduino_is_attached \
         hub_is_connected \
         all_services_are_running
     do

@@ -1,0 +1,7 @@
+[Service]
+ExecStart=/opt/windmachine/firmware/wp_status.sh led
+WorkingDirectory=/opt/windmachine/firmware
+User=display
+Group=display
+EnvironmentFile=/etc/windmachine/display.env
+Type=oneshot

@@ -79,6 +79,7 @@
     file:
       path: /etc/windmachine
       state: directory
+
   - name: Provide settings as environment vars
     tags: systemd
     copy:
@@ -87,29 +88,40 @@
         DISPLAY_PREFIX=display/{{ansible_hostname}}
         WP_FONT_PATH=/opt/windmachine/equinor_fonts/Equinor-Medium.otf
       dest: /etc/windmachine/display.env
-  - name: Copy service files
+
+  - name: Copy unit files
     tags: systemd
     copy:
-      src: "etc/systemd/system/{{item}}.service"
-      dest: "/etc/systemd/system/{{item}}.service"
+      src: "etc/systemd/system/{{item}}"
+      dest: "/etc/systemd/system/{{item}}"
     with_items:
-      - display-firmata
-      - display-forwarder
-      - display-gust
-      - display-mqtt
-      - display-visuals
+      - display-firmata.service
+      - display-forwarder.service
+      - display-gust.service
+      - display-mqtt.service
+      - display-status-led.service
+      - display-status-led.timer
+      - display-visuals.service
+
   - name: Start systemd services
     tags: systemd
     systemd:
       name: "{{item}}"
-      state: restarted # TODO, only restart when needed 
+      state: restarted # TODO, only restart when needed
       enabled: yes
       daemon_reload: yes # TODO, only restart on need
     with_items:
-      - display-firmata
-      - display-forwarder
-      - display-gust
-      - display-mqtt
-      - display-visuals
+      - display-firmata.service
+      - display-forwarder.service
+      - display-gust.service
+      - display-mqtt.service
+      - display-status-led.timer
+      - display-visuals.service
 
-
+  - name: Disable bluetooth service
+    tags: systemd
+    systemd:
+      name: "hciuart"
+      state: stopped
+      enabled: no
+      daemon_reload: yes

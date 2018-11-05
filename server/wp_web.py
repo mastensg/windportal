@@ -27,7 +27,7 @@ log.setLevel(getattr(logging, log_level.upper()))
 
 def assert_valid_windspeed(w):
     assert isinstance(w, numbers.Number), "Windspeed not a number: {}".format(type(w))
-    assert 0.0 < w < 40.0, "Invalid {}".format(w)
+    assert 0.0 <= w < 40.0, "Invalid {}".format(w)
     return
 
 def windspeed_ukenergy():

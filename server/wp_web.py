@@ -76,7 +76,7 @@ def seen_since(messages, time : float):
             devices[d] = t
     return devices
 
-def setup_app(broker_url, check_interval=30*60, done_cb=None):
+def setup_app(broker_url, check_interval=30*60, status_interval=10, done_cb=None):
     wind_speed = 0.1111
     wind_speed_updated_at_fmt = datetime.datetime.now().replace(microsecond=0).isoformat()
     wind_speed_updated_at_time = time.time()
@@ -170,8 +170,6 @@ last {} heartbeat_messages:
             _oldest = heartbeat_messages.pop(0)
         heartbeat_messages.append(m)
 
-        write_status_page()
-
     def mqtt_connected(client, u, f, rc):
         log.info('MQTT connected')
 
@@ -222,27 +220,37 @@ last {} heartbeat_messages:
             try:
                 fetch_and_publish()
                 check_heartbeats()
-                write_status_page()
             except Exception as e:
                 log.exception('Failed to fetch data: {}'.format(str(e)))
             gevent.sleep(check_interval)
         if done_cb:
             done_cb()
 
-    fetch_and_publish() 
+    fetch_and_publish()
     gevent.spawn(fetcher)
+
+    def status_page_writer():
+        while running:
+            try:
+                write_status_page()
+            except Exception as e:
+                log.exception('Failed to write status page: {}'.format(str(e)))
+            gevent.sleep(status_interval)
+
+    write_status_page()
+    gevent.spawn(status_page_writer)
 
     def shutdown():
         running = False
         mqtt_client.disconnect()
-   
+
     return shutdown
 
 def main():
     broker_url = os.environ.get('BROKER_URL', 'mqtt://localhost')
     fetch_interval = float(os.environ.get('FETCH_INTERVAL', 15*60))
 
-    done = gevent.event.AsyncResult()   
+    done = gevent.event.AsyncResult()
     app = setup_app(broker_url, check_interval=fetch_interval, done_cb=lambda x: done.set(None))
     log.info('Fetcher running')
 

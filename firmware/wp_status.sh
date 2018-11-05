@@ -27,7 +27,7 @@ modem_link_is_up() {
 }
 
 hub_is_connected() {
-    ping -c 1 -w 1 windportal.dept.no >/dev/null
+    timeout 1 ping -c 1 windportal.dept.no >/dev/null
 }
 
 all_services_are_running() {

@@ -24,7 +24,7 @@ class Inputs():
         gust_factor_stddev: float = 0.10, # ratio
         noise_period : int = 200,
         idle_duty : float = 0.20, # on ratio
-        active_time : float = 30.0,
+        active_time : float = 15.0,
         min_windspeed : float = 5.0,
         
         time : float = 0.0):

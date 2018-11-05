@@ -42,4 +42,10 @@ To make something flashable of a known size (under 4GB) with a known hostname.
 * Resize root partition to 3100M with `cfdisk`
 * Make image using `dd if=/dev/mmcblk1 conv=sync,noerror bs=1M count=8k | gzip -c > display0-raspbian.img.gz`
 
+## Environment variables
 
+Some programs require variables to be set to work.
+
+    MSGFLO_BROKER={{display_broker_url}}
+    DISPLAY_PREFIX=display/{{ansible_hostname}}
+    WP_FONT_PATH=/opt/windmachine/equinor_fonts/Equinor-Medium.otf

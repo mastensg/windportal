@@ -1,0 +1,17 @@
+server {
+	listen 80 default_server;
+	listen [::]:80 default_server;
+
+	root /opt/windportal/html;
+
+	index index.html;
+
+	server_name _;
+
+	location / {
+		auth_basic "windportal";
+		auth_basic_user_file /opt/windportal/htpasswd;
+
+		try_files $uri $uri/ =404;
+	}
+}

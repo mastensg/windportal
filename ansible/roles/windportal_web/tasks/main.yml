@@ -9,6 +9,8 @@
       - python-setuptools
       - virtualenv
       - rsync
+      - nginx
+
   - name: unprivileged user
     user:
       name: windportal
@@ -28,12 +30,34 @@
       delete: yes
       archive: yes
 
+  - name: htpasswd
+    tags: nginx
+    no_log: yes
+    notify: restart nginx
+    copy:
+      content: "{{ windportal_web_htpasswd }}"
+      dest: /opt/windportal/htpasswd
+
+  - name: sites-available
+    tags: nginx
+    notify: restart nginx
+    copy:
+      src: etc/nginx/sites-available/default
+      dest: /etc/nginx/sites-available/default
+
+  - name: web root
+    tags: nginx
+    file:
+      path: /opt/windportal/html
+      state: directory
+
   - name: Set permissions
     file:
       path: /opt/windportal
       recurse: true
       owner: windportal
       group: windportal
+
   - name: Install Python packages
     pip:
       chdir: '/opt/windportal/server'
@@ -54,6 +78,7 @@
         BROKER_URL={{hub_broker_url}}
         FETCH_INTERVAL=600
       dest: /etc/windportal/web.env
+
   - name: Copy service files
     tags: systemd
     copy:
@@ -61,7 +86,8 @@
       dest: "/etc/systemd/system/{{item}}.service"
     with_items:
       - windportal_web
-  - name: Start systemd services
+
+  - name: Restart systemd services
     tags: systemd
     systemd:
       name: "{{item}}"
@@ -70,5 +96,3 @@
       daemon_reload: yes # TODO, only restart on need
     with_items:
       - windportal_web
-
-

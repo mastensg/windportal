@@ -222,15 +222,12 @@ static void render_active(AppState *as) {
 
   // background
 
-  cairo_set_source_rgba(cr, 1.0, 1.0, 1.0, 1.0);
+  cairo_set_source_rgba(cr, 0.8, 0.8, 0.8, 1.0);
 
   cairo_rectangle(cr, 0.0, 0.0, canvas_width, canvas_height);
   cairo_fill(cr);
 
-  // cairo_set_source_rgba(cr, 0.220, 0.220, 0.220, 1.0);
-  // cairo_set_source_rgba(cr, 1.0, 0.0, 0.216, 1.0);
-  // cairo_set_source_rgba(cr, 0.910, 0.212, 0.263, 1.0);
-  cairo_set_source_rgba(cr, 0.933, 0.173, 0.325, 1.0);  // ee 2c 53
+  cairo_set_source_rgba(cr, 0.8, 0.00, 0.00, 1.0); // cc 00 00
 
   // wind speed number
   {

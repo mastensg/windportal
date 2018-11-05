@@ -109,7 +109,7 @@ class Participant(msgflo.Participant):
     outputs = {
       'wind_speed': state.wind_speed,
     }
-    print('TODO: realize outputs', outputs)
+    #print('TODO: realize outputs', outputs)
     for k, v in outputs.items():
       self.ipc_session.send(k, v)
 
@@ -125,7 +125,7 @@ class Participant(msgflo.Participant):
       os.remove(self.windspeed_file)
 
     got = self.ipc_session.recv(timeout_ms=5)
-    print('g', got)
+    #print('g', got)
 
     inputs = Inputs(
         time=time.monotonic(),
@@ -151,7 +151,7 @@ class Participant(msgflo.Participant):
     state_changed = next != self.state
     if state_changed:
       entry = { 'inputs': inputs.__dict__, 'state': next.__dict__ }
-      log.info(entry)
+      #log.info(entry)
 
     self.state = next
     self.inputs = inputs

@@ -78,11 +78,16 @@ def seen_since(messages, time : float):
 
 def setup_app(broker_url, check_interval=30*60, done_cb=None):
     wind_speed = 0.1111
+    wind_speed_updated_at_fmt = datetime.datetime.now().replace(microsecond=0).isoformat()
+    wind_speed_updated_at_time = time.time()
     heartbeat_messages = []
     running = True
 
     def write_status_page():
         nonlocal wind_speed
+        nonlocal wind_speed_updated_at_fmt
+        nonlocal wind_speed_updated_at_time
+        nonlocal heartbeat_messages
 
         log.info('Writing status page')
 
@@ -113,6 +118,9 @@ def setup_app(broker_url, check_interval=30*60, done_cb=None):
 
             status = """<h1 style="color: red">Offline</h1>"""
 
+            dt = now - wind_speed_updated_at_time
+            wind_speed_updated_at_ago = str(datetime.timedelta(seconds=dt))
+
             if 0 < len(heartbeat_messages):
                 m = heartbeat_messages[-1]
                 t = m["time_received"]
@@ -127,7 +135,7 @@ def setup_app(broker_url, check_interval=30*60, done_cb=None):
 <pre>
 last updated: {} UTC
 
-wind_speed:   {} m/s
+wind_speed:   {} m/s at {} ({} ago)
 
 <hr />
 last {} heartbeat_messages:
@@ -136,6 +144,8 @@ last {} heartbeat_messages:
         status,
         nowf,
         wind_speed,
+        wind_speed_updated_at_fmt,
+        wind_speed_updated_at_ago,
         len(heartbeat_messages),
         "\n\n".join(map(format_heartbeat_message, reversed(heartbeat_messages)))
         )
@@ -195,8 +205,15 @@ last {} heartbeat_messages:
 
     def fetch_and_publish():
         log.info('Fetching new wind data')
+
         nonlocal wind_speed
+        nonlocal wind_speed_updated_at_fmt
+        nonlocal wind_speed_updated_at_time
+
         wind_speed = windspeed_ukenergy()
+        wind_speed_updated_at_fmt = datetime.datetime.now().replace(microsecond=0).isoformat()
+        wind_speed_updated_at_time = time.time()
+
         mqtt_client.publish('display/display0/windspeed', wind_speed, retain=True)
         log.info('New windspeed is {}'.format(wind_speed))
 

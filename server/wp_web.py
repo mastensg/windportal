@@ -15,6 +15,7 @@ import time
 import xml.etree.ElementTree
 import math
 import numbers
+import pprint
 from urllib.parse import urlparse
 
 import logging
@@ -27,7 +28,7 @@ log.setLevel(getattr(logging, log_level.upper()))
 def assert_valid_windspeed(w):
     assert isinstance(w, numbers.Number), "Windspeed not a number: {}".format(type(w))
     assert 0.0 < w < 40.0, "Invalid {}".format(w)
-    return  
+    return
 
 def windspeed_ukenergy():
     url = 'https://ukenergy.statoil.com/wind'
@@ -80,7 +81,70 @@ def setup_app(broker_url, check_interval=30*60, done_cb=None):
     heartbeat_messages = []
     running = True
 
-    def handle_heartbeat():
+    def write_status_page():
+        nonlocal wind_speed
+
+        log.info('Writing status page')
+
+        now = time.time()
+
+        def format_heartbeat_message(m):
+            t = m["time_received"]
+            lt = time.localtime(t)
+            tf = time.strftime("%Y-%m-%dT%H:%M:%SZ", lt)
+
+            dt = now - t
+            dtf = str(datetime.timedelta(seconds=dt))
+
+            mf = pprint.pformat(m)
+
+            return """
+{} ({} ago)
+
+{}
+""".format(
+        tf,
+        dtf,
+        mf
+        )
+
+        with open("/opt/windportal/html/index.html", "w") as f:
+            nowf = datetime.datetime.now().replace(microsecond=0).isoformat()
+
+            status = """<h1 style="color: red">Offline</h1>"""
+
+            if 0 < len(heartbeat_messages):
+                m = heartbeat_messages[-1]
+                t = m["time_received"]
+                dt = now - t
+
+                if dt < 60.0:
+                    status = """<h1 style="color: green">Online</h1>"""
+
+            doc = """
+<title>windportal</title>
+{}
+<pre>
+last updated: {} UTC
+
+wind_speed:   {} m/s
+
+<hr />
+last {} heartbeat_messages:
+{}
+""".format(
+        status,
+        nowf,
+        wind_speed,
+        len(heartbeat_messages),
+        "\n\n".join(map(format_heartbeat_message, reversed(heartbeat_messages)))
+        )
+
+            f.write(doc)
+
+    def handle_heartbeat(message):
+        log.info('Handling heartbeat')
+
         # Heartbeat messages as per msgflo participant discovery protocol
         d = message.payload.decode('utf8')
         m = json.loads(d)
@@ -96,8 +160,12 @@ def setup_app(broker_url, check_interval=30*60, done_cb=None):
             _oldest = heartbeat_messages.pop(0)
         heartbeat_messages.append(m)
 
+        write_status_page()
+
     def mqtt_connected(client, u, f, rc):
         log.info('MQTT connected')
+
+        mqtt_client.subscribe("fbp")
 
     def mqtt_disconnected(client, u, rc):
         log.info('MQTT disconnected: {}'.format(rc))
@@ -106,10 +174,9 @@ def setup_app(broker_url, check_interval=30*60, done_cb=None):
     def mqtt_message_received(client, u, message):
         try:
             if message.topic == 'fbp':
-                handle_heartbeat(message.payload)
+                handle_heartbeat(message)
             else:
                 raise ValueError("Unknown MQTT topic: {}".format(message.topic))
-            mqtt_handle_message(client, u, message)
         except Exception as e:
             log.exception('Failed to handle MQTT message %: %s'.format(message.topic, message.payload))
 
@@ -138,6 +205,7 @@ def setup_app(broker_url, check_interval=30*60, done_cb=None):
             try:
                 fetch_and_publish()
                 check_heartbeats()
+                write_status_page()
             except Exception as e:
                 log.exception('Failed to fetch data: {}'.format(str(e)))
             gevent.sleep(check_interval)

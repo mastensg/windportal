@@ -23,9 +23,9 @@ class Inputs():
         perturbation_period : float = 1000.0, # milliseconds
         gust_factor_stddev: float = 0.10, # ratio
         noise_period : int = 200,
-        idle_speed : float = 2.5, # meters/second
-        active_time : float = 10.0,
-        min_windspeed : float = 2.5,
+        idle_duty : float = 0.20, # on ratio
+        active_time : float = 30.0,
+        min_windspeed : float = 5.0,
         
         time : float = 0.0):
 
@@ -72,12 +72,15 @@ def next_state(current : State, inputs: Inputs):
 
     state.user_button_on = inputs.user_button
 
-    wind_speed = inputs.wind_speed if is_active else inputs.idle_speed
+    if is_active:
+        wind_speed = inputs.wind_speed * state.perturbation
 
-    speed_with_gusts = (wind_speed * state.perturbation)
-    speed_with_gusts = max(inputs.min_windspeed, speed_with_gusts) # ensure fan turns on for low speeds
+        # ensure fan turns on for low speeds
+        wind_speed = max(inputs.min_windspeed, wind_speed)
 
-    state.fan_duty = (1 / 25) * speed_with_gusts * inputs.scale
+        state.fan_duty = (1 / 25) * wind_speed * (3.0 * inputs.scale)
+    else:
+        state.fan_duty = inputs.idle_duty
 
     return state
 
@@ -111,13 +114,13 @@ def main():
 
         s = copy.copy(state.__dict__)
         del s['noise']
-        print('i', inputs.__dict__)
-        print('s', s)
+        #print('i', inputs.__dict__)
+        #print('s', s)
         sys.stdout.flush()
 
         set_outputs_ipc(ipc_session, state)
 
-    print('main')
+    #print('main')
     result = gevent.event.AsyncResult()
     def run():
         while True:

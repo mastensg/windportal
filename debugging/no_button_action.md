@@ -199,3 +199,27 @@ into
 TimeoutStartSec=20
 WatchdogSec=2
 ```
+
+too short watchdog timeout:
+
+```
+Nov 26 13:30:28 display0 systemd[1]: display-firmata.service: Service hold-off time over, scheduling restart.
+Nov 26 13:30:28 display0 systemd[1]: Stopped display-firmata.service.
+Nov 26 13:30:28 display0 systemd[1]: Started display-firmata.service.
+Nov 26 13:30:28 display0 python[10508]: Python Version 3.5.3 (default, Sep 27 2018, 17:25:39)
+Nov 26 13:30:28 display0 python[10508]: [GCC 6.3.0 20170516]
+Nov 26 13:30:28 display0 python[10508]: PyMata version 2.18  Copyright(C) 2013-18 Alan Yorinks    All rights reserved.
+Nov 26 13:30:28 display0 python[10508]: Opening Arduino Serial port /dev/ttyACM0
+Nov 26 13:30:30 display0 systemd[1]: display-firmata.service: Watchdog timeout (limit 2s)!
+Nov 26 13:30:30 display0 systemd[1]: display-firmata.service: Killing process 10508 (python) with signal SIGABRT.
+Nov 26 13:30:30 display0 systemd[1]: display-firmata.service: Main process exited, code=killed, status=6/ABRT
+Nov 26 13:30:30 display0 systemd[1]: display-firmata.service: Unit entered failed state.
+Nov 26 13:30:30 display0 systemd[1]: display-firmata.service: Failed with result 'watchdog'.
+```
+
+```
+TimeoutStartSec=10
+WatchdogSec=10
+```
+
+looks good.

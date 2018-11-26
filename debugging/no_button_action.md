@@ -83,3 +83,119 @@ crw-rw---- 1 root dialout 188,  0 Nov 26 12:26 /dev/ttyUSB0
 crw-rw---- 1 root dialout 188,  1 Nov 26 12:10 /dev/ttyUSB1
 mastensg@display0:~ $
 ```
+
+## mitigation
+
+* enable watchdog for `display-firmata` service
+
+`WatchdogSec=30`
+
+```
+mastensg@display0:~ $ sudo systemctl restart display-firmata
+Warning: display-firmata.service changed on disk. Run 'systemctl daemon-reload' to reload units.
+mastensg@display0:~ $ sudo systemctl daemon-reload
+mastensg@display0:~ $ sudo systemctl restart display-firmata
+mastensg@display0:~ $ journalctl -f
+-- Logs begin at Thu 2016-11-03 17:16:43 UTC. --
+Nov 26 12:49:43 display0 sudo[2659]: pam_unix(sudo:session): session opened for user root by mastensg(uid=0)
+Nov 26 12:49:43 display0 systemd[1]: Stopped display-firmata.service.
+Nov 26 12:49:43 display0 systemd[1]: Started display-firmata.service.
+Nov 26 12:49:44 display0 sudo[2659]: pam_unix(sudo:session): session closed for user root
+Nov 26 12:49:44 display0 systemd[1]: Started display-status-led.service.
+Nov 26 12:49:45 display0 systemd[1]: display-firmata.service: Watchdog timeout (limit 1s)!
+Nov 26 12:49:45 display0 systemd[1]: display-firmata.service: Killing process 2666 (python) with signal SIGABRT.
+Nov 26 12:49:45 display0 systemd[1]: display-firmata.service: Main process exited, code=killed, status=6/ABRT
+Nov 26 12:49:45 display0 systemd[1]: display-firmata.service: Unit entered failed state.
+Nov 26 12:49:45 display0 systemd[1]: display-firmata.service: Failed with result 'watchdog'.
+
+
+
+
+Nov 26 12:49:54 display0 systemd[1]: Starting display-status-led.service...
+Nov 26 12:49:55 display0 systemd[1]: display-firmata.service: Service hold-off time over, scheduling restart.
+Nov 26 12:49:55 display0 systemd[1]: Stopped display-firmata.service.
+Nov 26 12:49:55 display0 systemd[1]: Started display-firmata.service.
+Nov 26 12:49:56 display0 systemd[1]: Started display-status-led.service.
+Nov 26 12:49:56 display0 systemd[1]: display-firmata.service: Watchdog timeout (limit 1s)!
+Nov 26 12:49:56 display0 systemd[1]: display-firmata.service: Killing process 2690 (python) with signal SIGABRT.
+Nov 26 12:49:56 display0 systemd[1]: display-firmata.service: Main process exited, code=killed, status=6/ABRT
+Nov 26 12:49:56 display0 systemd[1]: display-firmata.service: Unit entered failed state.
+Nov 26 12:49:56 display0 systemd[1]: display-firmata.service: Failed with result 'watchdog'.
+
+
+
+
+
+
+
+
+Nov 26 12:50:04 display0 systemd[1]: Starting display-status-led.service...
+Nov 26 12:50:06 display0 systemd[1]: Started display-status-led.service.
+Nov 26 12:50:06 display0 systemd[1]: display-firmata.service: Service hold-off time over, scheduling restart.
+Nov 26 12:50:06 display0 systemd[1]: Stopped display-firmata.service.
+Nov 26 12:50:06 display0 systemd[1]: Started display-firmata.service.
+Nov 26 12:50:08 display0 systemd[1]: display-firmata.service: Watchdog timeout (limit 1s)!
+Nov 26 12:50:08 display0 systemd[1]: display-firmata.service: Killing process 2729 (python) with signal SIGABRT.
+Nov 26 12:50:08 display0 systemd[1]: display-firmata.service: Main process exited, code=killed, status=6/ABRT
+Nov 26 12:50:08 display0 systemd[1]: display-firmata.service: Unit entered failed state.
+Nov 26 12:50:08 display0 systemd[1]: display-firmata.service: Failed with result 'watchdog'.
+
+
+
+
+
+^C
+mastensg@display0:~ $
+```
+
+`WatchdogSec=30`
+
+```
+Nov 26 12:51:00 display0 systemd[1]: Started display-status-led.service.
+Nov 26 12:51:24 display0 systemd[1]: Starting display-status-led.service...
+Nov 26 12:51:26 display0 systemd[1]: Started display-status-led.service.
+Nov 26 12:51:28 display0 systemd[1]: display-firmata.service: Watchdog timeout (limit 30s)!
+Nov 26 12:51:28 display0 systemd[1]: display-firmata.service: Killing process 2903 (python) with signal SIGABRT.
+Nov 26 12:51:28 display0 systemd[1]: display-firmata.service: Main process exited, code=killed, status=6/ABRT
+Nov 26 12:51:28 display0 systemd[1]: display-firmata.service: Unit entered failed state.
+Nov 26 12:51:28 display0 systemd[1]: display-firmata.service: Failed with result 'watchdog'.
+Nov 26 12:51:34 display0 systemd[1]: Starting display-status-led.service...
+Nov 26 12:51:36 display0 systemd[1]: Started display-status-led.service.
+Nov 26 12:51:38 display0 systemd[1]: display-firmata.service: Service hold-off time over, scheduling restart.
+Nov 26 12:51:38 display0 systemd[1]: Stopped display-firmata.service.
+Nov 26 12:51:38 display0 systemd[1]: Started display-firmata.service.
+Nov 26 12:51:39 display0 kernel: cdc_acm 1-1.1.2.4:1.0: failed to set dtr/rts
+Nov 26 12:51:40 display0 kernel: cdc_acm 1-1.1.2.4:1.0: failed to set dtr/rts
+Nov 26 12:51:54 display0 systemd[1]: Starting display-status-led.service...
+Nov 26 12:51:56 display0 systemd[1]: Started display-status-led.service.
+Nov 26 12:52:04 display0 systemd[1]: Starting display-status-led.service...
+Nov 26 12:52:06 display0 systemd[1]: Started display-status-led.service.
+Nov 26 12:52:08 display0 systemd[1]: display-firmata.service: Watchdog timeout (limit 30s)!
+Nov 26 12:52:08 display0 systemd[1]: display-firmata.service: Killing process 2983 (python) with signal SIGABRT.
+Nov 26 12:52:08 display0 systemd[1]: display-firmata.service: Main process exited, code=killed, status=6/ABRT
+Nov 26 12:52:08 display0 systemd[1]: display-firmata.service: Unit entered failed state.
+Nov 26 12:52:08 display0 systemd[1]: display-firmata.service: Failed with result 'watchdog'.
+Nov 26 12:52:14 display0 systemd[1]: Starting display-status-led.service...
+Nov 26 12:52:16 display0 systemd[1]: Started display-status-led.service.
+Nov 26 12:52:19 display0 systemd[1]: display-firmata.service: Service hold-off time over, scheduling restart.
+Nov 26 12:52:19 display0 systemd[1]: Stopped display-firmata.service.
+Nov 26 12:52:19 display0 systemd[1]: Started display-firmata.service.
+Nov 26 12:52:19 display0 systemd[1]: Starting display-status-led.service...
+Nov 26 12:52:20 display0 kernel: cdc_acm 1-1.1.2.4:1.0: failed to set dtr/rts
+Nov 26 12:52:21 display0 systemd[1]: Started display-status-led.service.
+```
+
+### disable output buffering, to make the journal useful
+
+`ExecStart=/opt/windmachine/venv/bin/python /opt/windmachine/firmware/wp_firmata.py`
+
+into
+
+`ExecStart=/opt/windmachine/venv/bin/python -u /opt/windmachine/firmware/wp_firmata.py`
+
+### watchdog timeout
+
+```
+TimeoutStartSec=20
+WatchdogSec=2
+```

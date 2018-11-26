@@ -6,6 +6,8 @@ RestartSec=10
 User=display
 Group=display
 EnvironmentFile=/etc/windmachine/display.env
+TimeoutStartSec=20
+WatchdogSec=2
 
 [Unit]
 After=network-online.target

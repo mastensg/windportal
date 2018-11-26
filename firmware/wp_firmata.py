@@ -4,6 +4,7 @@ import os
 
 import gevent
 from PyMata.pymata import PyMata
+import sdnotify
 
 import wp_ipc
 
@@ -14,6 +15,8 @@ POTENTIOMETER_ANALOG_PIN = 0
 BUTTON_PIN = 2
 
 def main():
+    notifier = sdnotify.SystemdNotifier()
+
     the_ipc_session = wp_ipc.Session()
 
     port = os.environ.get('FIRMATA_PORT', '/dev/ttyACM0')
@@ -25,6 +28,8 @@ def main():
     board.set_pin_mode(FAN_PIN, board.PWM, board.ANALOG)
     board.servo_config(GAUGE_PIN)
     board.set_pin_mode(POTENTIOMETER_ANALOG_PIN, board.INPUT, board.ANALOG)
+
+    notifier.notify("READY=1")
 
     while True:
         published_values = the_ipc_session.recv()
@@ -50,6 +55,8 @@ def main():
         the_ipc_session.send("button", button_pressed)
 
         gevent.sleep(0.100)
+
+        notifier.notify("WATCHDOG=1")
 
 
 if __name__ == '__main__':

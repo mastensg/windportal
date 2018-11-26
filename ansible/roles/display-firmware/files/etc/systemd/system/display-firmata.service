@@ -1,5 +1,5 @@
 [Service]
-ExecStart=/opt/windmachine/venv/bin/python /opt/windmachine/firmware/wp_firmata.py
+ExecStart=/opt/windmachine/venv/bin/python -u /opt/windmachine/firmware/wp_firmata.py
 WorkingDirectory=/opt/windmachine/firmware
 Restart=always
 RestartSec=10

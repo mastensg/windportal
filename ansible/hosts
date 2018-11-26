@@ -1,5 +1,5 @@
 hub      ansible_host=windportal.dept.no
-display0 ansible_host=display0.local
+display0 ansible_host=wind_display0
 display1 ansible_host=display1.local
 
 

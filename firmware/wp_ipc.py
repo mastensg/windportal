@@ -58,7 +58,7 @@ def main():
     if send_message:
         gevent.sleep(0.5) # make sure Session is up
         print('sending {}={}'.format(key, value))
-        s.send(key, float(value))
+        s.send(key, json.loads(value))
         r = s.recv(timeout_ms=500)
         gevent.sleep(0.5)
 

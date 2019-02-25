@@ -98,42 +98,42 @@ void pixels_of_surface(uint8_t *pixels, cairo_surface_t *surface, int width,
 
 static const char *name_of_speed(float speed) {
   if (speed < 0.3) {
-    return "Stille";
+    return "Calm";
   }
   if (speed < 1.6) {
-    return "Flau vind";
+    return "Light air";
   }
   if (speed < 3.4) {
-    return "Svak vind";
+    return "Light breeze";
   }
   if (speed < 5.5) {
-    return "Lett bris";
+    return "Gentle breeze";
   }
   if (speed < 8.0) {
-    return "Laber bris";
+    return "Moderate breeze";
   }
   if (speed < 10.8) {
-    return "Frisk bris";
+    return "Fresh breeze";
   }
   if (speed < 13.9) {
-    return "Liten kuling";
+    return "Strong breeze";
   }
   if (speed < 17.2) {
-    return "Stiv kuling";
+    return "Moderate gale";
   }
   if (speed < 20.8) {
-    return "Sterk kuling";
+    return "Gale";
   }
   if (speed < 24.5) {
-    return "Liten storm";
+    return "Strong gale";
   }
   if (speed < 28.5) {
-    return "Full storm";
+    return "Storm";
   }
   if (speed < 32.7) {
-    return "Sterk storm";
+    return "Violent storm";
   }
-  return "Orkan";
+  return "Hurricane";
 }
 
 static const double random_stddev = 0.2;

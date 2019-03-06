@@ -103,7 +103,7 @@
       - display-status-led.timer
       - display-visuals.service
 
-  - name: Retart systemd services
+  - name: Restart systemd services
     tags: systemd
     systemd:
       name: "{{item}}"
